@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package app.data;
+package com.project2.mybudget.data;
 
 /**
  *
  * @author Giang
  */
-public class DataHelper {
+public class JsonHelper {
     
 }

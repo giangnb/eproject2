@@ -35,7 +35,7 @@ create table [Data] (
 	[Reason] nvarchar(128),
 	[Amount] varchar(64) not null default '0',
 	[Description] ntext,
-	[Date] DateTime not null default CURRENT_TIMESTAMP
+	[Date_] DateTime not null default CURRENT_TIMESTAMP
 )
 go
 

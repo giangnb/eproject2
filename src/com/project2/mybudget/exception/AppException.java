@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project2.mybudget;
+package com.project2.mybudget.exception;
 
 /**
  *
  * @author Giang
  */
-public class App {
-    public static void main(String[] args) {
+public class AppException extends Exception{
+
+    public AppException(String message) {
+        super(message);
     }
+    
 }

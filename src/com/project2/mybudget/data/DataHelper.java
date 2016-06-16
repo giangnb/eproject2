@@ -1,14 +1,124 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.project2.mybudget.data;
 
+import com.project2.mybudget.exception.AppException;
+import com.project2.mybudget.properties.Constants;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
- *
+ * Database connection and manipulation methods
  * @author Giang
  */
 public class DataHelper {
+    private Connection con;
+    protected PreparedStatement stm;
+    protected ResultSet rs;
     
+    /**
+     * Open and get database connection object
+     * @return Connection Database connection
+     * @throws AppException 
+     */
+    public Connection open() throws AppException {
+        try {
+            Class.forName(Constants.CONNECTION.getString("Driver"));
+            
+            con = DriverManager.getConnection(Constants.ConnectionUrl(), 
+                    Constants.CONNECTION.getString("UserId"), Constants.CONNECTION.getString("Password"));
+        } catch (ClassNotFoundException ex) {
+            throw new AppException("Driver error&&"+ex.getMessage());
+        } catch (SQLException ex) {
+            throw new AppException("Connection error&&"+ex.getMessage());
+        }
+        return con;
+    }
+    
+    /**
+     * Close all database connection objects
+     * @throws AppException 
+     */
+    public void close() throws AppException {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                throw new AppException(ex.getMessage());
+            }
+        }
+        if (stm != null) {
+            try {
+                stm.close();
+            } catch (SQLException ex) {
+                throw new AppException(ex.getMessage());
+            }
+        }
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException ex) {
+                throw new AppException(ex.getMessage());
+            }
+        }
+        
+        con = null;
+        stm = null;
+        rs = null;
+    }
+    
+    /**
+     * Execute a query with fixed SQL statement
+     * (without custom data or implemented custom data)
+     * @param sql SQL statement
+     * @return ResultSet
+     * @throws AppException 
+     */
+    public ResultSet query(String sql) throws AppException {
+        try {
+            stm = con.prepareStatement(sql);
+            rs = stm.executeQuery();
+        } catch (SQLException ex) {
+            throw new AppException("Data manipulation error&&"+ex.getMessage());
+        }
+        return rs;
+    }
+    
+    /**
+     * Execute a query with SQL statement and data strings
+     * @param sql SQL statement (with '?' marks)
+     * @param data Data strings (will replace each '?' mark)
+     * @return
+     * @throws AppException 
+     */
+    public ResultSet query(String sql, String[] data) throws AppException {
+        try {
+            stm = con.prepareStatement(sql);
+            for (int i = 1; i <= sql.split("[?]").length; i++) {
+                try {
+                    stm.setString(i, data[i]);
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+            rs = stm.executeQuery();
+        } catch (SQLException ex) {
+            throw new AppException("Data manipulation error&&"+ex.getMessage());
+        }
+        return rs;
+    }
+    
+//    public static void main(String[] args) {
+//        try {
+//            System.out.println(open());
+//        } catch (AppException ex) {
+//            Logger.getLogger(DataHelper.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        try {
+//            close();
+//        } catch (AppException ex) {
+//            Logger.getLogger(DataHelper.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 }

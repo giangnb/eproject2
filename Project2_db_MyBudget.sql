@@ -1,3 +1,4 @@
+-- sp_readerrorlog
 use master
 go
 if exists (select name from sysdatabases where name='MyBudget') drop database [MyBudget]

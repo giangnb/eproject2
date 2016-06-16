@@ -5,8 +5,6 @@
  */
 package com.project2.mybudget;
 
-import com.project2.mybudget.models.Wallet;
-
 /**
  *
  * @author Giang

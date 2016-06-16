@@ -15,6 +15,7 @@ public class Account {
     private String accountId;
     private Info info;
     private String pinCode;
+    public Date lastChanged;
 
     public Account() {
     }
@@ -57,6 +58,13 @@ public class Account {
     public static class Info {
         private String name, email, email2;
         private Date birthDate;
+        public int loginFailCount;
+        /* Status: 
+        0 : disabled
+        1 : enabled
+        2 : password change
+        */
+        public int status;
 
         public Info() {
         }

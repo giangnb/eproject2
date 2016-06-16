@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author Giang
  */
 public class JsonHelper {
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     
     /**
      * Turn an object to JSON string
@@ -26,7 +26,7 @@ public class JsonHelper {
     public static String SerializeObject(Object o) throws AppException {
         String json = "";
         try {
-            json =  mapper.writeValueAsString(o);
+            json =  MAPPER.writeValueAsString(o);
         } catch (JsonProcessingException ex) {
             throw new AppException("Data parsing error&&"+ex.getMessage());
         }
@@ -44,7 +44,7 @@ public class JsonHelper {
     public static <E> E DeserializeObject(String json, Class<E> c) throws AppException {
         E obj = null;
         try {
-            obj = mapper.readValue(json, c);
+            obj = MAPPER.readValue(json, c);
         } catch (IOException ex) {
             throw new AppException("Object parsing error&&"+ex.getMessage());
         }

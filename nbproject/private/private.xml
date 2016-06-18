@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/models/Wallet.java</file>
+            <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/properties/Connection.properties</file>
+            <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/properties/Constants.java</file>
             <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/App.java</file>
-            <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/models/Data.java</file>
-            <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/data/DataHelper.java</file>
-            <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/models/Account.java</file>
-            <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/data/JsonHelper.java</file>
+            <file>file:/C:/Users/Giang/Documents/NetBeansProjects/eProject2/eproject2/src/com/project2/mybudget/properties/Settings.java</file>
         </group>
     </open-files>
 </project-private>

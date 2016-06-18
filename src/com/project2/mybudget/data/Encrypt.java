@@ -72,15 +72,11 @@ public class Encrypt {
         }
     }
     
-//    public static void main(String[] args) {
-//        String s = "abcdef";
-//        String enc = encrypt(s);
-//        
-//        System.out.println(enc);
-//        
-//        System.out.println(decrypt(enc));
-//        
-//        System.out.println(hash(enc));
-//        
-//    }
+    public static void main(String[] args) {
+        String[] s = {"MyBudget", "project2", "1234567"};
+        
+        for (String string : s) {
+            System.out.println(encrypt(string));
+        }
+    }
 }

@@ -5,6 +5,7 @@
  */
 package com.project2.mybudget.properties;
 
+import com.project2.mybudget.data.Encrypt;
 import java.util.ResourceBundle;
 
 /**
@@ -16,7 +17,7 @@ public class Constants {
     private static final ResourceBundle SQL = ResourceBundle.getBundle("com.project2.mybudget.properties.SqlStatements");
     
     public static String ConnectionUrl() {
-        return CONNECTION.getString("Host")+";databaseName="+CONNECTION.getString("Database");
+        return CONNECTION.getString("Host")+";databaseName="+Encrypt.decrypt(CONNECTION.getString("Database"));
     }
     
     public static String sql(String key) {

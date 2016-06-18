@@ -27,7 +27,8 @@ public class DataHelper {
             Class.forName(Constants.CONNECTION.getString("Driver"));
             
             con = DriverManager.getConnection(Constants.ConnectionUrl(), 
-                    Constants.CONNECTION.getString("UserId"), Constants.CONNECTION.getString("Password"));
+                    Encrypt.decrypt(Constants.CONNECTION.getString("UserId")),
+                    Encrypt.decrypt(Constants.CONNECTION.getString("Password")));
         } catch (ClassNotFoundException ex) {
             throw new AppException("Driver error&&"+ex.getMessage());
         } catch (SQLException ex) {
@@ -110,13 +111,14 @@ public class DataHelper {
     }
     
 //    public static void main(String[] args) {
+//        DataHelper dataHelper = new DataHelper();
 //        try {
-//            System.out.println(open());
+//            System.out.println(dataHelper.open());
 //        } catch (AppException ex) {
 //            Logger.getLogger(DataHelper.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        try {
-//            close();
+//            dataHelper.close();
 //        } catch (AppException ex) {
 //            Logger.getLogger(DataHelper.class.getName()).log(Level.SEVERE, null, ex);
 //        }

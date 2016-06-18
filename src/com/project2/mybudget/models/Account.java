@@ -59,6 +59,7 @@ public class Account {
         private String name, email, email2;
         private Date birthDate;
         public int loginFailCount;
+        public String tempPassword;
         /* Status: 
         0 : disabled
         1 : enabled

@@ -6,7 +6,7 @@ create database [MyBudget]
 go
 use MyBudget
 go
-
+ 
 create table [Accounts] (
 	[AccountId] varchar(64) primary key,
 	[Authentication] nvarchar(512) not null default '', -- Auth string = Hash(User + Pass)

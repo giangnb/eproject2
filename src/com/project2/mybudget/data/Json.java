@@ -8,13 +8,16 @@ package com.project2.mybudget.data;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project2.mybudget.exception.AppException;
+import com.project2.mybudget.models.Account;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Serialize an object and de-serialize an JSON string
  * @author Giang
  */
-public class JsonHelper {
+public class Json {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     
     /**
@@ -58,14 +61,14 @@ public class JsonHelper {
 //            js = SerializeObject(acc);
 //            System.out.println(js);
 //        } catch (AppException ex) {
-//            Logger.getLogger(JsonHelper.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(Json.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //        
 //        try {
 //            Account a = DeserializeObject(js, Account.class);
 //            System.out.println(a);
 //        } catch (AppException ex) {
-//            Logger.getLogger(JsonHelper.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(Json.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
 }

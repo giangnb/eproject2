@@ -5,11 +5,15 @@
  */
 package com.project2.mybudget;
 
+import com.project2.mybudget.views.AccountLogin;
+import com.project2.mybudget.views.StartScreen;
+
 /**
  *
  * @author Giang
  */
 public class App {
     public static void main(String[] args) {
+        StartScreen.run();
     }
 }

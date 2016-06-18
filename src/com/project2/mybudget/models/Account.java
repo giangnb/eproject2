@@ -64,6 +64,7 @@ public class Account {
         0 : disabled
         1 : enabled
         2 : password change
+        3 : new (need auth. code)
         */
         public int status;
 

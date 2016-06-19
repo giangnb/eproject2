@@ -110,6 +110,49 @@ public class DataHelper {
         return rs;
     }
     
+    /**
+     * Execute an insert/update/delete query with SQL statement
+     * (without custom data or implemented custom data)
+     * @param sql SQL statement (with '?' marks)
+     * @return
+     * @throws AppException 
+     */
+    public int nonQuery(String sql) throws AppException {
+        int result = 0;
+        try {
+            stm = con.prepareStatement(sql);
+            result = stm.executeUpdate();
+        } catch (SQLException ex) {
+            throw new AppException("Data manipulation error&&"+ex.getMessage());
+        }
+        return result;
+    }
+    
+    /**
+     * Execute an insert/update/delete query with SQL statement and data strings
+     * @param sql SQL statement (with '?' marks)
+     * @param data Data strings (will replace each '?' mark)
+     * @return
+     * @throws AppException 
+     */
+    public int nonQuery(String sql, String[] data) throws AppException {
+        int result = 0;
+        try {
+            stm = con.prepareStatement(sql);
+            for (int i = 1; i <= sql.split("[?]").length; i++) {
+                try {
+                    stm.setString(i, data[i]);
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+            result = stm.executeUpdate();
+        } catch (SQLException ex) {
+            throw new AppException("Data manipulation error&&"+ex.getMessage());
+        }
+        return result;
+    }
+    
 //    public static void main(String[] args) {
 //        DataHelper dataHelper = new DataHelper();
 //        try {

@@ -9,6 +9,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
+/**
+ * Protected class: Encrypt by AES core
+ * @author Giang
+ */
 class AES {
 
     private static SecretKeySpec secretKey;

@@ -11,7 +11,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Encrypt data:
+ * # Hashing: SHA-256
+ * # Encrypt: AES 128-bit (with build-in PK)
  * @author Giang
  */
 public class Encrypt {
@@ -72,11 +74,11 @@ public class Encrypt {
         }
     }
     
-    public static void main(String[] args) {
-        String[] s = {"MyBudget", "project2", "1234567"};
-        
-        for (String string : s) {
-            System.out.println(encrypt(string));
-        }
-    }
+//    public static void main(String[] args) {
+//        String[] s = {"MyBudget", "project2", "1234567"};
+//        
+//        for (String string : s) {
+//            System.out.println(encrypt(string));
+//        }
+//    }
 }

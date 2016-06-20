@@ -5,11 +5,10 @@
  */
 package com.project2.mybudget;
 
-import com.project2.mybudget.views.AccountLogin;
 import com.project2.mybudget.views.StartScreen;
 
 /**
- *
+ * Start-point
  * @author Giang
  */
 public class App {

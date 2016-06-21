@@ -5,6 +5,7 @@
  */
 package com.project2.mybudget;
 
+import com.project2.mybudget.controllers.AccountsController;
 import com.project2.mybudget.views.StartScreen;
 
 /**
@@ -12,7 +13,9 @@ import com.project2.mybudget.views.StartScreen;
  * @author Giang
  */
 public class App {
+    public static AccountsController ACCOUNT;
     public static void main(String[] args) {
+        ACCOUNT = new AccountsController();
         StartScreen.run();
     }
 }

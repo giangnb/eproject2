@@ -5,9 +5,16 @@
  */
 package com.project2.mybudget.views;
 
+import com.project2.mybudget.App;
+import com.project2.mybudget.exception.AppException;
+import com.project2.mybudget.exception.ExceptionViewer;
+import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -86,6 +93,11 @@ public class AccountLogin extends javax.swing.JFrame {
         jLabel8.setText("Password:");
 
         btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
         btnForget.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnForget.setText("Forget password");
@@ -175,8 +187,38 @@ public class AccountLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        // TODO add your handling code here:
+        AccountRegister.run();
+        this.dispose();
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        String user, pass;
+        boolean isValid = false;
+        user = txtUser.getText().toLowerCase();
+        pass = new String(pswPassword.getPassword());
+        
+        if (user.matches(Constants.regex("EMAIL"))) {
+            isValid = pass.length()>=5;
+        }
+        
+        if (isValid) {
+            try {
+                if (App.ACCOUNT.login(user, pass)) {
+                    System.out.println("Logged in!");
+                    // getAccount
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please check your email"
+                            + " and password.\nPlease register if you don't have an account.",
+                            "Login failed", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (AppException ex) {
+                ExceptionViewer.view(ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please check your email and password.",
+                    "Login error", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
      * 

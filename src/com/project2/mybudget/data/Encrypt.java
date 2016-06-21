@@ -74,6 +74,16 @@ public class Encrypt {
         }
     }
     
+    /**
+     * Get authentication string
+     * @param email
+     * @param password
+     * @return 
+     */
+    public static String getAuthenticationString(String email, String password) {
+        return hash(email+password);
+    }
+    
 //    public static void main(String[] args) {
 //        String[] s = {"MyBudget", "project2", "1234567"};
 //        

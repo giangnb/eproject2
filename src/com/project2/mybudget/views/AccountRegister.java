@@ -5,7 +5,17 @@
  */
 package com.project2.mybudget.views;
 
+import com.project2.mybudget.App;
+import com.project2.mybudget.data.Encrypt;
+import com.project2.mybudget.exception.AppException;
+import com.project2.mybudget.exception.ExceptionViewer;
+import com.project2.mybudget.models.Account;
+import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +28,10 @@ public class AccountRegister extends javax.swing.JFrame {
      */
     public AccountRegister() {
         initComponents();
+        setLocationRelativeTo(null);
+        setResizable(false);
+        
+        lblError.setText("");
     }
 
     /**
@@ -30,22 +44,87 @@ public class AccountRegister extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
+        lblPassword = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
+        pswPass = new javax.swing.JPasswordField();
+        lblRepeat = new javax.swing.JLabel();
+        pswRepeat = new javax.swing.JPasswordField();
+        txtEmail = new javax.swing.JTextField();
+        lblError = new javax.swing.JLabel();
+        btnRegister = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MyBudget - Register");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Register");
 
-        jLabel2.setText("Your name:");
+        lblName.setText("Your name:");
 
-        jLabel3.setText("Email address:");
+        lblEmail.setText("Email address:");
 
-        jLabel4.setText("Password:");
+        lblPassword.setText("Password:");
+
+        txtName.setNextFocusableComponent(txtEmail);
+        txtName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNameKeyReleased(evt);
+            }
+        });
+
+        pswPass.setNextFocusableComponent(pswRepeat);
+        pswPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pswPassKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                pswPassKeyTyped(evt);
+            }
+        });
+
+        lblRepeat.setText("Reapeat:");
+
+        pswRepeat.setNextFocusableComponent(btnRegister);
+        pswRepeat.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pswRepeatKeyReleased(evt);
+            }
+        });
+
+        txtEmail.setNextFocusableComponent(pswPass);
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEmailKeyReleased(evt);
+            }
+        });
+
+        lblError.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblError.setForeground(new java.awt.Color(204, 0, 0));
+        lblError.setText("-- Error message --");
+
+        btnRegister.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnRegister.setText("Register");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -56,11 +135,22 @@ public class AccountRegister extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lblRepeat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                            .addComponent(lblPassword, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtName)
+                            .addComponent(pswPass)
+                            .addComponent(pswRepeat)
+                            .addComponent(txtEmail)
+                            .addComponent(lblError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnCancel)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -69,16 +159,116 @@ public class AccountRegister extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblName)
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblEmail)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addContainerGap(185, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblPassword)
+                    .addComponent(pswPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblRepeat)
+                    .addComponent(pswRepeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblError)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCancel)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        AccountLogin.run();
+        this.dispose();
+    }//GEN-LAST:event_formWindowClosed
+
+    private void pswPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pswPassKeyTyped
+        
+    }//GEN-LAST:event_pswPassKeyTyped
+
+    private void pswRepeatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pswRepeatKeyReleased
+        if (!new String(pswPass.getPassword()).equals(new String(pswRepeat.getPassword()))) {
+            lblRepeat.setForeground(Color.red);
+        } else {
+            lblRepeat.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_pswRepeatKeyReleased
+
+    private void pswPassKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pswPassKeyReleased
+        if (pswPass.getPassword().length<5) {
+            lblPassword.setForeground(Color.red);
+        } else {
+            lblPassword.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_pswPassKeyReleased
+
+    private void txtNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNameKeyReleased
+        if (txtName.getText().length()<3) {
+            lblName.setForeground(Color.red);
+        } else {
+            lblName.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtNameKeyReleased
+
+    private void txtEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyReleased
+        if (!txtEmail.getText().matches(Constants.regex("EMAIL"))) {
+            lblEmail.setForeground(Color.red);
+        } else {
+            lblEmail.setForeground(Color.black);
+        }
+    }//GEN-LAST:event_txtEmailKeyReleased
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        String name, email, pass, re;
+        name = txtName.getText();
+        email = txtEmail.getText();
+        pass = new String(pswPass.getPassword());
+        re = new String(pswRepeat.getPassword());
+        
+        boolean isValid = name.length()>=3 &&
+                email.matches(Constants.regex("EMAIL")) &&
+                pass.length()>=5 &&
+                re.equals(pass);
+        
+        if (isValid) {
+            Account acc = new Account();
+            acc.setAccountId(email);
+            Account.Info info = new Account.Info();
+            info.setName(name);
+            info.status = 1;
+            info.setEmail(email);
+            String auth = Encrypt.getAuthenticationString(email, pass);
+            
+            try {
+                if (App.ACCOUNT.register(acc, auth)) {
+                    JOptionPane.showMessageDialog(null, "Your account have been "
+                            + "created sucessfully!\nPlease login with your email and password.",
+                            "Account created", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Cannot create your account.\n"
+                            + "Your email might be already used.",
+                            "Account creation error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (AppException ex) {
+                ExceptionViewer.view(ex);
+            }
+        } else {
+            lblError.setText("Please check again!");
+        }
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**
      * 
@@ -110,9 +300,17 @@ public class AccountRegister extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnRegister;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel lblEmail;
+    private javax.swing.JLabel lblError;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblRepeat;
+    private javax.swing.JPasswordField pswPass;
+    private javax.swing.JPasswordField pswRepeat;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 }

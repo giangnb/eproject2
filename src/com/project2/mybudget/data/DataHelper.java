@@ -34,6 +34,7 @@ public class DataHelper {
         } catch (SQLException ex) {
             throw new AppException("Connection error&&"+ex.getMessage());
         }
+        
         return con;
     }
     
@@ -72,6 +73,7 @@ public class DataHelper {
     /**
      * Execute a query with fixed SQL statement
      * (without custom data or implemented custom data)
+     * ! Have to open() and close()
      * @param sql SQL statement
      * @return ResultSet
      * @throws AppException 
@@ -88,6 +90,7 @@ public class DataHelper {
     
     /**
      * Execute a query with SQL statement and data strings
+     * ! Have to open() and close()
      * @param sql SQL statement (with '?' marks)
      * @param data Data strings (will replace each '?' mark)
      * @return
@@ -113,6 +116,7 @@ public class DataHelper {
     /**
      * Execute an insert/update/delete query with SQL statement
      * (without custom data or implemented custom data)
+     * No need to open() or close()
      * @param sql SQL statement (with '?' marks)
      * @return
      * @throws AppException 
@@ -120,16 +124,20 @@ public class DataHelper {
     public int nonQuery(String sql) throws AppException {
         int result = 0;
         try {
+            open();
             stm = con.prepareStatement(sql);
             result = stm.executeUpdate();
         } catch (SQLException ex) {
             throw new AppException("Data manipulation error&&"+ex.getMessage());
+        } finally {
+            close();
         }
         return result;
     }
     
     /**
      * Execute an insert/update/delete query with SQL statement and data strings
+     * No need to open() or close()
      * @param sql SQL statement (with '?' marks)
      * @param data Data strings (will replace each '?' mark)
      * @return
@@ -138,6 +146,7 @@ public class DataHelper {
     public int nonQuery(String sql, String[] data) throws AppException {
         int result = 0;
         try {
+            open();
             stm = con.prepareStatement(sql);
             for (int i = 1; i <= sql.split("[?]").length; i++) {
                 try {
@@ -149,6 +158,8 @@ public class DataHelper {
             result = stm.executeUpdate();
         } catch (SQLException ex) {
             throw new AppException("Data manipulation error&&"+ex.getMessage());
+        } finally {
+            close();
         }
         return result;
     }

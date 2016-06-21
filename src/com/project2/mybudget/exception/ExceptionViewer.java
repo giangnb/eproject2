@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
  */
 public class ExceptionViewer {
 
-    public static JOptionPane view(Exception ex) {
+    public static void view(Exception ex) {
         String msg = ex.getMessage().split("&&")[0];
         String detail = "";
         try {
@@ -21,8 +21,6 @@ public class ExceptionViewer {
         } catch (Exception e) {
             // ignore
         }
-        JOptionPane opt = new JOptionPane(ex.getMessage());
-        
-        return opt;
+        JOptionPane.showMessageDialog(null, msg, "MyBudget - Error", JOptionPane.ERROR_MESSAGE);
     }
 }

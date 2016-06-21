@@ -10,6 +10,7 @@ import com.project2.mybudget.exception.AppException;
 import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,6 +93,13 @@ public class AccountLogin extends javax.swing.JFrame {
 
         jLabel8.setText("Password:");
 
+        pswPassword.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pswPasswordActionPerformed(evt);
+            }
+        });
+
+        btnLogin.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnLogin.setText("Login");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,32 +204,39 @@ public class AccountLogin extends javax.swing.JFrame {
         boolean isValid = false;
         user = txtUser.getText().toLowerCase();
         pass = new String(pswPassword.getPassword());
-        
+
         if (user.matches(Constants.regex("EMAIL"))) {
-            isValid = pass.length()>=5;
+            isValid = pass.length() >= 5;
         }
-        
+
         if (isValid) {
+            btnLogin.setEnabled(false);
             try {
                 if (App.ACCOUNT.login(user, pass)) {
                     System.out.println("Logged in!");
-                    // getAccount
+                    additionalActions();
                 } else {
                     JOptionPane.showMessageDialog(null, "Please check your email"
                             + " and password.\nPlease register if you don't have an account.",
                             "Login failed", JOptionPane.INFORMATION_MESSAGE);
+                    pswPassword.setText("");
                 }
             } catch (AppException ex) {
                 ExceptionViewer.view(ex);
             }
+            btnLogin.setEnabled(true);
         } else {
             JOptionPane.showMessageDialog(null, "Please check your email and password.",
                     "Login error", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    private void pswPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswPasswordActionPerformed
+        btnLoginActionPerformed(evt);
+    }//GEN-LAST:event_pswPasswordActionPerformed
+
     /**
-     * 
+     *
      */
     public static void run() {
 
@@ -270,5 +285,24 @@ public class AccountLogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField pswPassword;
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
+
+    private void additionalActions() {
+        String[] act = App.ACCOUNT.validate();
+        if (act[0].equals("1")) {
+            if (!act[1].equals("")) {
+                JOptionPane.showMessageDialog(null, act[1], "Notice", JOptionPane.INFORMATION_MESSAGE);
+            }
+            switch (App.ACCOUNT.getAccount().getInfo().status) {
+                case 2:
+                //Password change
+                case 3:
+                //Account activation
+                default:
+                //Login right a way
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, act[1], "Login failed", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
 }

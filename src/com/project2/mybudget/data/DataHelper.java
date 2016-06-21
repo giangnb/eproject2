@@ -98,14 +98,15 @@ public class DataHelper {
      */
     public ResultSet query(String sql, String[] data) throws AppException {
         try {
-            stm = con.prepareStatement(sql);
-            for (int i = 1; i <= sql.split("[?]").length; i++) {
+            for (int i = 0; i < data.length; i++) {
                 try {
-                    stm.setString(i, data[i]);
+                    //stm.setString(i, data[i]);
+                    sql = sql.replaceFirst("[?]", data[i]);
                 } catch (Exception e) {
                     // ignore
                 }
             }
+            stm = con.prepareStatement(sql);
             rs = stm.executeQuery();
         } catch (SQLException ex) {
             throw new AppException("Data manipulation error&&"+ex.getMessage());
@@ -147,14 +148,15 @@ public class DataHelper {
         int result = 0;
         try {
             open();
-            stm = con.prepareStatement(sql);
-            for (int i = 1; i <= sql.split("[?]").length; i++) {
+            for (int i = 0; i < data.length; i++) {
                 try {
-                    stm.setString(i, data[i]);
+                    //stm.setString(i, data[i]);
+                    sql = sql.replaceFirst("[?]", data[i]);
                 } catch (Exception e) {
                     // ignore
                 }
             }
+            stm = con.prepareStatement(sql);
             result = stm.executeUpdate();
         } catch (SQLException ex) {
             throw new AppException("Data manipulation error&&"+ex.getMessage());

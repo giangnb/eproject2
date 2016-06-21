@@ -7,6 +7,7 @@ package com.project2.mybudget.views;
 
 import com.project2.mybudget.App;
 import com.project2.mybudget.data.Encrypt;
+import com.project2.mybudget.data.Json;
 import com.project2.mybudget.exception.AppException;
 import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.models.Account;
@@ -250,6 +251,7 @@ public class AccountRegister extends javax.swing.JFrame {
             info.setName(name);
             info.status = 1;
             info.setEmail(email);
+            acc.setInfo(info);
             String auth = Encrypt.getAuthenticationString(email, pass);
             
             try {
@@ -257,6 +259,7 @@ public class AccountRegister extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Your account have been "
                             + "created sucessfully!\nPlease login with your email and password.",
                             "Account created", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Cannot create your account.\n"
                             + "Your email might be already used.",

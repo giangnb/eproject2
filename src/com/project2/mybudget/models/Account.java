@@ -43,8 +43,12 @@ public class Account {
         return info;
     }
 
-    public void setInfo(String name, String email, String email2, Date birthDate) {
-        this.info = new Info(name, email, email2, birthDate);
+    public void setInfo(Info info) {
+        this.info = info;
+    }
+
+    public void setInfo(String name, String email, Date birthDate) {
+        this.info = new Info(name, email, birthDate);
     }
 
     public String getPinCode() {
@@ -56,7 +60,7 @@ public class Account {
     }
     
     public static class Info {
-        private String name, email, email2;
+        private String name, email;
         private Date birthDate;
         public int loginFailCount;
         public String tempPassword;
@@ -67,17 +71,50 @@ public class Account {
         3 : new (need auth. code)
         */
         public int status;
+        public String activationCode;
 
         public Info() {
         }
 
-        public Info(String name, String email, String email2, Date birthDate) {
+        public Info(String name, String email, Date birthDate) {
             this.name = name;
             this.email = email;
-            this.email2 = email2;
             this.birthDate = birthDate;
         }
 
+        public int getLoginFailCount() {
+            return loginFailCount;
+        }
+
+        public void setLoginFailCount(int loginFailCount) {
+            this.loginFailCount = loginFailCount;
+        }
+
+        public String getTempPassword() {
+            return tempPassword;
+        }
+
+        public void setTempPassword(String tempPassword) {
+            this.tempPassword = tempPassword;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
+        }
+
+        public String getActivationCode() {
+            return activationCode;
+        }
+
+        public void setActivationCode(String activationCode) {
+            this.activationCode = activationCode;
+        }
+
+        
         public String getName() {
             return name;
         }
@@ -92,14 +129,6 @@ public class Account {
 
         public void setEmail(String email) {
             this.email = email;
-        }
-
-        public String getEmail2() {
-            return email2;
-        }
-
-        public void setEmail2(String email2) {
-            this.email2 = email2;
         }
 
         public Date getBirthDate() {

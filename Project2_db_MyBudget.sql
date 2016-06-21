@@ -9,7 +9,7 @@ use MyBudget
 go
  
 create table [Accounts] (
-	[AccountId] varchar(64) primary key,
+	[AccountId] varchar(128) primary key,
 	[Authentication] nvarchar(512) not null default '', -- Auth string = Hash(User + Pass)
 	[Info] ntext not null default '',
 	[LastChange] datetime not null default CURRENT_TIMESTAMP
@@ -24,7 +24,7 @@ go
 
 create table [Wallets] (
 	[WalletId] int primary key identity,
-	[AccountId] varchar(64) not null,
+	[AccountId] varchar(128) not null,
 	[Info] ntext not null default ''
 )
 go

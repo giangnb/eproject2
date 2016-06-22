@@ -10,11 +10,6 @@ import com.project2.mybudget.exception.AppException;
 import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +25,8 @@ public class AccountLogin extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
+
+        lblDescription.setText("Easily manage your budget");
     }
 
     /**
@@ -45,7 +42,7 @@ public class AccountLogin extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblDescription = new javax.swing.JLabel();
         btnRegister = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -71,8 +68,8 @@ public class AccountLogin extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("MyBudget");
 
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Lorem ipsum dolor sit amet");
+        lblDescription.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblDescription.setText("Lorem ipsum dolor sit amet");
 
         btnRegister.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnRegister.setText("Register");
@@ -126,7 +123,7 @@ public class AccountLogin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -162,7 +159,7 @@ public class AccountLogin extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3)
+                        .addComponent(lblDescription)
                         .addGap(36, 36, 36)
                         .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -272,7 +269,6 @@ public class AccountLogin extends javax.swing.JFrame {
     private javax.swing.JCheckBox chkAutoLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -282,6 +278,7 @@ public class AccountLogin extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel lblDescription;
     private javax.swing.JPasswordField pswPassword;
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
@@ -294,12 +291,17 @@ public class AccountLogin extends javax.swing.JFrame {
             }
             switch (App.ACCOUNT.getAccount().getInfo().status) {
                 case 2:
-                //Password change
+                    //Password change
+                    break;
                 case 3:
-                //Account activation
+                    //Account activation
+                    break;
                 default:
-                //Login right a way
+                    //Login right a way
+                    MainScreen.run();
+                    break;
             }
+            this.dispose();
         } else {
             JOptionPane.showMessageDialog(null, act[1], "Login failed", JOptionPane.ERROR_MESSAGE);
         }

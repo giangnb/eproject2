@@ -182,7 +182,7 @@ public class AccountsController {
             }
             info.setLoginFailCount(count);
             String infoJson = Json.SerializeObject(info);
-            System.out.println(infoJson);
+            //System.out.println(infoJson);
             data.nonQuery(Constants.sql("UPDATE_LOGIN_FAIL_COUNT"),
                     new String[]{infoJson, email});
         } catch (Exception ex) {

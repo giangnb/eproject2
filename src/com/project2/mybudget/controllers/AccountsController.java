@@ -5,12 +5,15 @@
  */
 package com.project2.mybudget.controllers;
 
+import com.project2.mybudget.App;
 import com.project2.mybudget.data.DataHelper;
 import com.project2.mybudget.data.Encrypt;
+import com.project2.mybudget.data.FileControl;
 import com.project2.mybudget.data.Json;
 import com.project2.mybudget.exception.AppException;
 import com.project2.mybudget.models.Account;
 import com.project2.mybudget.properties.Constants;
+import com.project2.mybudget.views.AccountLogin;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -76,6 +79,45 @@ public class AccountsController {
         updateLoginFailCount(email, isWrongPassword);
         if (isWrongPassword) {
             throw new AppException("Wrong password.");
+        }
+
+        return isValid;
+    }
+
+    public boolean loginAuto() throws AppException {
+        boolean isValid = false;
+        String email, authStr;
+
+        String file = FileControl.readString(Constants.file("USER_LOGIN"));
+        if (!file.equals("")) {
+            String[] s = file.split("&&");
+            if (s.length >= 2) {
+                email = s[0];
+                authStr = s[1];
+
+                boolean isWrongPassword = false;
+
+                data.open();
+                ResultSet query = data.query(Constants.sql("VALIDATE_ACCOUNT"), new String[]{email, authStr});
+                try {
+                    if (query.next()) {
+                        getAccount(email);
+                        if (query.getNString("Authentication").equals(authStr)) {
+                            isValid = true;
+                        } else {
+                            isWrongPassword = true;
+                        }
+                    }
+                } catch (SQLException ex) {
+                    throw new AppException("Internal error.&&" + ex.getMessage());
+                }
+                data.close();
+
+                updateLoginFailCount(email, isWrongPassword);
+                if (isWrongPassword) {
+                    throw new AppException("Wrong password.");
+                }
+            }
         }
 
         return isValid;
@@ -175,10 +217,10 @@ public class AccountsController {
         try {
             Account.Info info = account.getInfo();
             int count = info.loginFailCount;
-            if (count<5 && !isWrongPassword) {
+            if (count < 5 && !isWrongPassword) {
                 count = 0;
             } else {
-                count = count<5 ? count+1 : 5;
+                count = count < 5 ? count + 1 : 5;
             }
             info.setLoginFailCount(count);
             String infoJson = Json.SerializeObject(info);
@@ -189,5 +231,49 @@ public class AccountsController {
             throw new AppException("Account unavailable");
         }
 
+    }
+
+    /**
+     * Logout: Delete info in saved file & refresh data in account object
+     */
+    public void logout() {
+        FileControl.removeFile(Constants.file("USER_LOGIN"));
+        account = new Account();
+        AccountLogin.run();
+    }
+    
+    public void updateInfo() throws AppException {
+        String infoJson = Json.SerializeObject(account.getInfo());
+        data.nonQuery(Constants.sql("UPDATE_LOGIN_FAIL_COUNT"), new String[] {infoJson, account.getAccountId()});
+    }
+    
+    public boolean passwordChange(String oldPass, String newPass) throws AppException {
+        boolean isDone = false;
+        String oldAuth = Encrypt.hash(account.getAccountId()+oldPass);
+        String newAuth = "";
+        
+        data.open();
+        ResultSet query = data.query(Constants.sql("VALIDATE_ACCOUNT"), 
+                new String[]{account.getAccountId(), oldAuth});
+        try {
+            if (query.next()) {
+                if (query.getNString("Authentication").equals(oldAuth)) {
+                    newAuth = Encrypt.hash(account.getAccountId()+newPass);
+                    isDone = true;
+                } else {
+                    throw new AppException("Wrong password.");
+                }
+            }
+        } catch (SQLException ex) {
+            throw new AppException("Internal error.&&" + ex.getMessage());
+        }
+        data.close();
+        
+        if (isDone) {
+            data.nonQuery(Constants.sql("UPDATE_PASSWORD"), 
+                    new String[] {newAuth, account.getAccountId()});
+        }
+        
+        return isDone;
     }
 }

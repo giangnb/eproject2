@@ -6,11 +6,16 @@
 package com.project2.mybudget.views;
 
 import com.project2.mybudget.App;
+import com.project2.mybudget.exception.AppException;
+import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.models.Account;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,22 +23,24 @@ import java.util.Calendar;
  */
 public class AccountDescription extends javax.swing.JFrame {
 
-    private Account account; 
+    private Account account;
+
     /**
      * Creates new form AccountDescription
      */
     public AccountDescription() {
         account = App.ACCOUNT.getAccount();
-        
+
         initComponents();
         setLocationRelativeTo(null);
         setResizable(false);
         dateBirthDate.setDateFormat(new SimpleDateFormat("dd-MM-yyyy"));
-        
+
         lblEmail.setText(account.getAccountId());
-        txtName.setText(account.getInfo().getName()==null?"":account.getInfo().getName());
-        if (account.getInfo().getBirthDate()!=null) {
-            Calendar cal = Calendar.getInstance();
+        txtName.setText(account.getInfo().getName() == null ? "" : account.getInfo().getName());
+        dateBirthDate.setMaxDate(Calendar.getInstance());
+        Calendar cal = Calendar.getInstance();
+        if (account.getInfo().getBirthDate() != null) {
             cal.setTime(account.getInfo().getBirthDate());
             dateBirthDate.setSelectedDate(cal);
         }
@@ -64,9 +71,10 @@ public class AccountDescription extends javax.swing.JFrame {
         pswRepeat = new javax.swing.JPasswordField();
         jLabel7 = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnChangePass = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("MyBudget - Account");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -122,14 +130,6 @@ public class AccountDescription extends javax.swing.JFrame {
                 (datechooser.view.BackRenderer)null,
                 false,
                 true)));
-    dateBirthDate.setFormat(1);
-    try {
-        dateBirthDate.setDefaultPeriods(new datechooser.model.multiple.PeriodSet(new datechooser.model.multiple.Period(new java.util.GregorianCalendar(1980, 0, 1),
-            new java.util.GregorianCalendar(1980, 0, 1))));
-} catch (datechooser.model.exeptions.IncompatibleDataExeption e1) {
-    e1.printStackTrace();
-    }
-    dateBirthDate.setBehavior(datechooser.model.multiple.MultyModelBehavior.SELECT_SINGLE);
 
     jLabel69.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
     jLabel69.setText("Change your password");
@@ -142,8 +142,18 @@ public class AccountDescription extends javax.swing.JFrame {
 
     btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
     btnSave.setText("Save changes");
+    btnSave.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnSaveActionPerformed(evt);
+        }
+    });
 
-    jButton1.setText("Change password");
+    btnChangePass.setText("Change password");
+    btnChangePass.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnChangePassActionPerformed(evt);
+        }
+    });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -181,7 +191,7 @@ public class AccountDescription extends javax.swing.JFrame {
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(btnSave, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addComponent(btnChangePass, javax.swing.GroupLayout.Alignment.TRAILING))))
             .addContainerGap())
     );
     layout.setVerticalGroup(
@@ -220,12 +230,67 @@ public class AccountDescription extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addComponent(pswRepeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(jButton1)
-            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(btnChangePass)
+            .addContainerGap())
     );
 
     pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        Account.Info info = App.ACCOUNT.getAccount().getInfo();
+        info.setName(txtName.getText());
+        info.setBirthDate(dateBirthDate.getSelectedDate().getTime());
+        App.ACCOUNT.getAccount().setInfo(info);
+        try {
+            App.ACCOUNT.updateInfo();
+            JOptionPane.showMessageDialog(this, "Account information saved successfully.", "Account information", JOptionPane.INFORMATION_MESSAGE);
+            this.dispose();
+        } catch (AppException ex) {
+            ExceptionViewer.view(ex);
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnChangePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePassActionPerformed
+        String old, neo, rep;
+        old = new String(pswCurrent.getPassword());
+        neo = new String(pswNew.getPassword());
+        rep = new String(pswRepeat.getPassword());
+
+        boolean isValid = true;
+        if (old.length() < 5) {
+            isValid = false;
+        }
+        if (neo.length() < 5) {
+            isValid = false;
+        }
+        if (!neo.equals(rep)) {
+            isValid = false;
+        }
+        
+        if (isValid) {
+            try {
+                if (App.ACCOUNT.passwordChange(old, neo)) {
+                    JOptionPane.showMessageDialog(this, "Password changed successfully.\n"
+                            + "You'll need to login with new password next time.", "Password change", JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                    pswCurrent.setText("");
+                    pswNew.setText("");
+                    pswRepeat.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Cannot change password.\n"
+                            + "Please check your password again.", 
+                            "Password change error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (AppException ex) {
+                ExceptionViewer.view(ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please check your password again:\n"
+                    + " - Password must be at least 5 characters in length\n"
+                    + " - New password should match repeat password", "Notice", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btnChangePassActionPerformed
 
     /**
      * @param args the command line arguments
@@ -257,9 +322,9 @@ public class AccountDescription extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChangePass;
     private javax.swing.JButton btnSave;
     private datechooser.beans.DateChooserCombo dateBirthDate;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

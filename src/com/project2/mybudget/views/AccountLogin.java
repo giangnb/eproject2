@@ -6,10 +6,14 @@
 package com.project2.mybudget.views;
 
 import com.project2.mybudget.App;
+import com.project2.mybudget.data.Encrypt;
+import com.project2.mybudget.data.FileControl;
 import com.project2.mybudget.exception.AppException;
 import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -109,19 +113,26 @@ public class AccountLogin extends javax.swing.JFrame {
 
         txtUser.setNextFocusableComponent(pswPassword);
 
+        chkAutoLogin.setSelected(true);
         chkAutoLogin.setText("Login automatically");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(138, 138, 138)
-                .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(137, 137, 137))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jSeparator4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 128, Short.MAX_VALUE)
+                        .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 127, Short.MAX_VALUE))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -144,12 +155,6 @@ public class AccountLogin extends javax.swing.JFrame {
                         .addGap(170, 170, 170)
                         .addComponent(jLabel4)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jSeparator4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,6 +216,13 @@ public class AccountLogin extends javax.swing.JFrame {
             try {
                 if (App.ACCOUNT.login(user, pass)) {
                     System.out.println("Logged in!");
+
+                    // Write to file if needed
+                    if (chkAutoLogin.isSelected()) {
+                        String content = txtUser.getText().toLowerCase() + "&&" + Encrypt.hash(user+pass);
+                        FileControl.writeString(Constants.file("USER_LOGIN"), content);
+                    }
+
                     additionalActions();
                 } else {
                     JOptionPane.showMessageDialog(null, "Please check your email"
@@ -261,6 +273,33 @@ public class AccountLogin extends javax.swing.JFrame {
             }
         });
     }
+    
+    public static void runAuto() {
+
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(new WindowsLookAndFeel());
+                    break;
+                }
+            }
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(AccountLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new AccountLogin().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnForget;
@@ -284,6 +323,7 @@ public class AccountLogin extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void additionalActions() {
+        // Actions from Info object
         String[] act = App.ACCOUNT.validate();
         if (act[0].equals("1")) {
             if (!act[1].equals("")) {

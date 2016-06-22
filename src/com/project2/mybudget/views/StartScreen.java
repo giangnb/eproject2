@@ -5,6 +5,10 @@
  */
 package com.project2.mybudget.views;
 
+import com.project2.mybudget.App;
+import com.project2.mybudget.data.FileControl;
+import com.project2.mybudget.exception.AppException;
+import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -131,8 +135,21 @@ public class StartScreen extends javax.swing.JFrame {
 //            Logger.getLogger(StartScreen.class.getName()).log(Level.SEVERE, null, ex);
 //        }
         
-        this.setVisible(false);
-        AccountLogin.run();
+        if (!FileControl.readString(Constants.file("USER_LOGIN")).equals("")) {
+            lblStatus.setText("Logging in ...");
+            try {
+                if (App.ACCOUNT.loginAuto()) {
+                    MainScreen.run();
+                } else {
+                    AccountLogin.run();
+                }
+            } catch (AppException ex) {
+                AccountLogin.run();
+            }
+        } else {
+            AccountLogin.run();
+        }
+        
         this.dispose();
     }
 }

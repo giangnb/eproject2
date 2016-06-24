@@ -6,15 +6,18 @@
 package com.project2.mybudget.views;
 
 import com.project2.mybudget.App;
-import com.project2.mybudget.data.FileControl;
-import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -29,26 +32,11 @@ public class MainScreen extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         setTitle("MyBudget - ["+App.ACCOUNT.getAccount().getInfo().getName()+"]");
+        setMinimumSize(new Dimension(450, 380));
         
-        SimpleDateFormat df = new SimpleDateFormat("H");
-        String greeting = "Hi";
-        try {
-            int hr = Integer.parseInt(df.format(Calendar.getInstance().getTime()));
-            greeting = "Good ";
-            if (hr>=0 && hr<=11) {
-                greeting += "morning";
-            } else {
-                if (hr>=12 && hr <= 17) {
-                    greeting += "afternoon";
-                } else {
-                    greeting += "evening";
-                }
-            }
-        } catch (Exception e) {
-            greeting = "Hello";
-        }
+        setGreetingLabel();
         
-        lblGreeting.setText(greeting+", "+App.ACCOUNT.getAccount().getInfo().getName()+"!  ");
+        tabPaneInit();
     }
 
     /**
@@ -126,7 +114,6 @@ public class MainScreen extends javax.swing.JFrame {
 
         menuAccount.setText("Account");
 
-        miAccount.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         miAccount.setText("My account");
         miAccount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -221,8 +208,36 @@ public class MainScreen extends javax.swing.JFrame {
         d.setLocationRelativeTo(this);
         d.setResizable(false);
         d.setVisible(true);
-//        AccountDescription.run();
-//        setEnabled(true);
+        d.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                setGreetingLabel();
+            }
+        });
     }//GEN-LAST:event_miAccountActionPerformed
 
     private void miLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLogoutActionPerformed
@@ -235,7 +250,7 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_miLogoutActionPerformed
 
     private void miAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAboutActionPerformed
-        JDialog d = new JDialog(this, "MyBudget", true);
+        JDialog d = new JDialog(this, "MyBudget - Introduction", true);
         Container content = new MainAbout();
         d.setContentPane(content);
         d.setSize(300, 180);
@@ -248,6 +263,7 @@ public class MainScreen extends javax.swing.JFrame {
         JDialog d = new JDialog(this, "How to use MyBudget", true);
         Container content = new MainInstructions().getContentPane();
         d.setContentPane(content);
+        d.setMaximumSize(new Dimension(180, 220));
         d.setSize(420, 420);
         d.setLocationRelativeTo(this);
         d.setResizable(true);
@@ -305,4 +321,35 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JMenuItem miWallets;
     private javax.swing.JTabbedPane tabMain;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Initialize tabs for tabMain element
+     */
+    private void tabPaneInit() {
+        Component report, wallets;
+        report = new JScrollPane(new Report().getContentPane());
+        tabMain.add("Report", report);
+    }
+
+    private void setGreetingLabel() {
+        SimpleDateFormat df = new SimpleDateFormat("H");
+        String greeting = "Hi";
+        try {
+            int hr = Integer.parseInt(df.format(Calendar.getInstance().getTime()));
+            greeting = "Good ";
+            if (hr>=0 && hr<=11) {
+                greeting += "morning";
+            } else {
+                if (hr>=12 && hr <= 17) {
+                    greeting += "afternoon";
+                } else {
+                    greeting += "evening";
+                }
+            }
+        } catch (Exception e) {
+            greeting = "Hello";
+        }
+        
+        lblGreeting.setText(greeting+", "+App.ACCOUNT.getAccount().getInfo().getName()+"!  ");
+    }
 }

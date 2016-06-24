@@ -238,6 +238,8 @@ public class AccountDescription extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        btnSave.setEnabled(false);
+        
         Account.Info info = App.ACCOUNT.getAccount().getInfo();
         info.setName(txtName.getText());
         info.setBirthDate(dateBirthDate.getSelectedDate().getTime());
@@ -249,6 +251,8 @@ public class AccountDescription extends javax.swing.JFrame {
         } catch (AppException ex) {
             ExceptionViewer.view(ex);
         }
+        
+        btnSave.setEnabled(true);
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnChangePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChangePassActionPerformed

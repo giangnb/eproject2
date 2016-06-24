@@ -12,6 +12,7 @@ import com.project2.mybudget.exception.AppException;
 import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -32,11 +33,15 @@ import javax.swing.JOptionPane;
  */
 public class StartScreen extends javax.swing.JFrame {
 
+    private Color bgr;
     /**
      * Creates new form StartScreen
      */
     public StartScreen() {
         initComponents();
+        bgr = new Color(255, 177, 74);
+        setOpacity(0.75f);
+        this.getContentPane().setBackground(bgr);
         setIconImage(App.ICON);
         setSize(App.SCREEN_SIZE.width / 3, App.SCREEN_SIZE.height / 3);
         setLocationRelativeTo(null);
@@ -68,7 +73,6 @@ public class StartScreen extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         setLocationByPlatform(true);
         setUndecorated(true);
-        setOpacity(0.85F);
         setType(java.awt.Window.Type.POPUP);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
@@ -211,6 +215,8 @@ public class StartScreen extends javax.swing.JFrame {
             gr.dispose();
             
             JLabel lblImage = new JLabel(new ImageIcon(img));
+            lblImage.setBackground(bgr);
+            pnlIcon.setBackground(bgr);
             pnlIcon.add(lblImage);
 //            Graphics g = pnlIcon.getGraphics();
 //            pnlIcon.paintComponents(g);

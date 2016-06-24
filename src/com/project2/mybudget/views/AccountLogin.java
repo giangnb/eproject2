@@ -12,8 +12,6 @@ import com.project2.mybudget.exception.AppException;
 import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,6 +25,7 @@ public class AccountLogin extends javax.swing.JFrame {
      */
     public AccountLogin() {
         initComponents();
+        setIconImage(App.ICON);
         setLocationRelativeTo(null);
         setResizable(false);
 

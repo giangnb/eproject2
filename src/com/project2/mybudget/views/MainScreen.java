@@ -12,7 +12,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JDialog;
@@ -30,12 +29,14 @@ public class MainScreen extends javax.swing.JFrame {
      */
     public MainScreen() {
         initComponents();
+        setIconImage(App.ICON);
+        setSize((int)Math.round(App.SCREEN_SIZE.width/1.5), (int)Math.round(App.SCREEN_SIZE.height/1.5));
         setLocationRelativeTo(null);
-        setTitle("MyBudget - ["+App.ACCOUNT.getAccount().getInfo().getName()+"]");
+        setTitle("MyBudget - [" + App.ACCOUNT.getAccount().getInfo().getName() + "]");
         setMinimumSize(new Dimension(450, 380));
-        
+
         setGreetingLabel();
-        
+
         tabPaneInit();
     }
 
@@ -71,12 +72,15 @@ public class MainScreen extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MyBudget");
+        setBackground(new java.awt.Color(255, 255, 204));
 
         lblGreeting.setFont(new java.awt.Font("Tahoma", 3, 10)); // NOI18N
         lblGreeting.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblGreeting.setText("jLabel1");
 
         jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jMenuBar1.setBackground(new java.awt.Color(255, 204, 51));
 
         menuBudget.setText("Budget");
 
@@ -204,10 +208,9 @@ public class MainScreen extends javax.swing.JFrame {
         JDialog d = new JDialog(this, "MyBudget - Account", true);
         Container content = new AccountDescription().getContentPane();
         d.setContentPane(content);
-        d.setSize(content.getSize().width, content.getSize().height+30);
+        d.setSize(content.getSize().width, content.getSize().height + 30);
         d.setLocationRelativeTo(this);
         d.setResizable(false);
-        d.setVisible(true);
         d.addWindowListener(new WindowListener() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -238,12 +241,14 @@ public class MainScreen extends javax.swing.JFrame {
                 setGreetingLabel();
             }
         });
+        d.setVisible(true);
     }//GEN-LAST:event_miAccountActionPerformed
 
     private void miLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLogoutActionPerformed
-        int choice = JOptionPane.showConfirmDialog(null, "Do you want to logout now?", "MyBudget - Logout", JOptionPane.YES_NO_OPTION);
+        int choice = JOptionPane.showConfirmDialog(null, "Do you want to logout now?",
+                "MyBudget - Logout", JOptionPane.YES_NO_OPTION);
         // choice: 0 = YES ; 1 = NO
-        if (choice==0) {
+        if (choice == 0) {
             App.ACCOUNT.logout();
             this.dispose();
         }
@@ -337,19 +342,17 @@ public class MainScreen extends javax.swing.JFrame {
         try {
             int hr = Integer.parseInt(df.format(Calendar.getInstance().getTime()));
             greeting = "Good ";
-            if (hr>=0 && hr<=11) {
+            if (hr >= 0 && hr <= 11) {
                 greeting += "morning";
+            } else if (hr >= 12 && hr <= 17) {
+                greeting += "afternoon";
             } else {
-                if (hr>=12 && hr <= 17) {
-                    greeting += "afternoon";
-                } else {
-                    greeting += "evening";
-                }
+                greeting += "evening";
             }
         } catch (Exception e) {
             greeting = "Hello";
         }
-        
-        lblGreeting.setText(greeting+", "+App.ACCOUNT.getAccount().getInfo().getName()+"!  ");
+
+        lblGreeting.setText(greeting + ", " + App.ACCOUNT.getAccount().getInfo().getName() + "!  ");
     }
 }

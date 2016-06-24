@@ -5,7 +5,6 @@
  */
 package com.project2.mybudget.controllers;
 
-import com.project2.mybudget.App;
 import com.project2.mybudget.data.DataHelper;
 import com.project2.mybudget.data.Encrypt;
 import com.project2.mybudget.data.FileControl;
@@ -16,8 +15,6 @@ import com.project2.mybudget.properties.Constants;
 import com.project2.mybudget.views.AccountLogin;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Account CRUD and authentication

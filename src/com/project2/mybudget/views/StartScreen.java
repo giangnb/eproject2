@@ -6,13 +6,25 @@
 package com.project2.mybudget.views;
 
 import com.project2.mybudget.App;
+import com.project2.mybudget.data.DataHelper;
 import com.project2.mybudget.data.FileControl;
 import com.project2.mybudget.exception.AppException;
+import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import static java.lang.System.exit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,8 +37,16 @@ public class StartScreen extends javax.swing.JFrame {
      */
     public StartScreen() {
         initComponents();
+        setIconImage(App.ICON);
+        setSize(App.SCREEN_SIZE.width / 3, App.SCREEN_SIZE.height / 3);
         setLocationRelativeTo(null);
         setResizable(false);
+        lblStatus.setText("Initializing...");
+
+        loadIconImage();
+
+        setVisible(true);
+        loadProcess();
     }
 
     /**
@@ -40,6 +60,7 @@ public class StartScreen extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         lblStatus = new javax.swing.JLabel();
+        pnlIcon = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MyBudget");
@@ -50,6 +71,9 @@ public class StartScreen extends javax.swing.JFrame {
         setOpacity(0.85F);
         setType(java.awt.Window.Type.POPUP);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -59,17 +83,20 @@ public class StartScreen extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("MyBudget");
 
-        lblStatus.setText("Loading ...");
+        lblStatus.setText("WELCOME");
+
+        pnlIcon.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addComponent(lblStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(pnlIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -77,7 +104,9 @@ public class StartScreen extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblStatus)
                 .addContainerGap())
         );
@@ -86,11 +115,15 @@ public class StartScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        loadProcess();
+        //loadProcess();
     }//GEN-LAST:event_formWindowOpened
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+
+    }//GEN-LAST:event_formWindowActivated
+
     /**
-     * 
+     *
      */
     public static void run() {
         /* Set the Nimbus look and feel */
@@ -99,8 +132,6 @@ public class StartScreen extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
 
-        
-        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -119,24 +150,39 @@ public class StartScreen extends javax.swing.JFrame {
                 new StartScreen().setVisible(true);
             }
         });
-        
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblStatus;
+    private javax.swing.JPanel pnlIcon;
     // End of variables declaration//GEN-END:variables
 
     private void loadProcess() {
-//        try {
-//            Thread.sleep(2500);
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(StartScreen.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            Thread.sleep(500);
+            lblStatus.setText("Please wait...");
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(StartScreen.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+        try {
+            lblStatus.setText("Checking connection...");
+            if (!new DataHelper().checkConnection()) {
+                JOptionPane.showMessageDialog(null, "Cannot establish data connection!", "Connection error", JOptionPane.ERROR_MESSAGE);
+                this.dispose();
+                exit(1);
+            }
+        } catch (AppException ex) {
+            AppException exception = new AppException(ex.getMessage().split("&&")[0] + "\nApp will now discontinue.");
+            ExceptionViewer.view(exception);
+            this.dispose();
+            exit(1);
+        }
         if (!FileControl.readString(Constants.file("USER_LOGIN")).equals("")) {
-            lblStatus.setText("Logging in ...");
+            lblStatus.setText("Logging in...");
             try {
                 if (App.ACCOUNT.loginAuto()) {
                     MainScreen.run();
@@ -149,7 +195,30 @@ public class StartScreen extends javax.swing.JFrame {
         } else {
             AccountLogin.run();
         }
-        
+
         this.dispose();
+    }
+
+    private void loadIconImage() {
+        try {
+            BufferedImage img = ImageIO.read(new File(Constants.file("ICON_IMAGE")));
+            ImageIcon icon = new ImageIcon(img);
+            
+            img = new BufferedImage(pnlIcon.getSize().height, pnlIcon.getSize().height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D gr = img.createGraphics();
+            gr.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            gr.drawImage(icon.getImage(), 0, 0, pnlIcon.getSize().height, pnlIcon.getSize().height, null);
+            gr.dispose();
+            
+            JLabel lblImage = new JLabel(new ImageIcon(img));
+            pnlIcon.add(lblImage);
+//            Graphics g = pnlIcon.getGraphics();
+//            pnlIcon.paintComponents(g);
+//            g.drawImage(img, 0, 0, null);
+//            this.getGraphics().drawImage(img, 0, 0, null);
+        } catch (IOException ex) {
+            // ignore
+            System.out.println("Image load error");
+        }
     }
 }

@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,6 +10,7 @@ import com.project2.mybudget.App;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -268,8 +270,9 @@ public class MainScreen extends javax.swing.JFrame {
         JDialog d = new JDialog(this, "How to use MyBudget", true);
         Container content = new MainInstructions().getContentPane();
         d.setContentPane(content);
-        d.setMaximumSize(new Dimension(180, 220));
+        d.setMinimumSize(new Dimension(App.SCREEN_SIZE.width/5, App.SCREEN_SIZE.height/5));
         d.setSize(420, 420);
+        d.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         d.setLocationRelativeTo(this);
         d.setResizable(true);
         d.setVisible(true);

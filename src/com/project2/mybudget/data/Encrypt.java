@@ -17,7 +17,6 @@ import java.util.logging.Logger;
  * @author Giang
  */
 public class Encrypt {
-    
     /**
      * Encrypt string with AES algorithm and build-in private key
      * @param source Source string
@@ -72,6 +71,15 @@ public class Encrypt {
             Logger.getLogger(Encrypt.class.getName()).log(Level.SEVERE, null, ex);
             return "";
         }
+    }
+    
+    public static String getRandomCode(int length) {
+        String result = "";
+        final char[] chars = new char[] {'Q','W','E','R','T','Y','U','I','O','P','A','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M'};
+        for (int i = 0; i < length; i++) {
+            result += chars[(int)Math.round(Math.random()*chars.length)];
+        }
+        return result;
     }
     
     /**

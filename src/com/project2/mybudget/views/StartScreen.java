@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 public class StartScreen extends javax.swing.JFrame {
 
     private Color bgr;
+
     /**
      * Creates new form StartScreen
      */
@@ -170,7 +171,7 @@ public class StartScreen extends javax.swing.JFrame {
         } catch (InterruptedException ex) {
             Logger.getLogger(StartScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         try {
             lblStatus.setText("Checking connection...");
             if (!new DataHelper().checkConnection()) {
@@ -188,7 +189,11 @@ public class StartScreen extends javax.swing.JFrame {
             lblStatus.setText("Logging in...");
             try {
                 if (App.ACCOUNT.loginAuto()) {
-                    MainScreen.run();
+                    if (App.ACCOUNT.getAccount().getInfo().status <= 1) {
+                        MainScreen.run();
+                    } else {
+                        AccountLogin.run();
+                    }
                 } else {
                     AccountLogin.run();
                 }
@@ -206,13 +211,13 @@ public class StartScreen extends javax.swing.JFrame {
         try {
             BufferedImage img = ImageIO.read(new File(Constants.file("ICON_IMAGE")));
             ImageIcon icon = new ImageIcon(img);
-            
+
             img = new BufferedImage(pnlIcon.getSize().height, pnlIcon.getSize().height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D gr = img.createGraphics();
             gr.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             gr.drawImage(icon.getImage(), 0, 0, pnlIcon.getSize().height, pnlIcon.getSize().height, null);
             gr.dispose();
-            
+
             JLabel lblImage = new JLabel(new ImageIcon(img));
             lblImage.setBackground(bgr);
             pnlIcon.setBackground(bgr);

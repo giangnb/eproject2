@@ -15,6 +15,8 @@ import com.project2.mybudget.properties.Constants;
 import com.project2.mybudget.views.AccountLogin;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Account CRUD and authentication
@@ -238,24 +240,24 @@ public class AccountsController {
         account = new Account();
         AccountLogin.run();
     }
-    
+
     public void updateInfo() throws AppException {
         String infoJson = Json.SerializeObject(account.getInfo());
-        data.nonQuery(Constants.sql("UPDATE_LOGIN_FAIL_COUNT"), new String[] {infoJson, account.getAccountId()});
+        data.nonQuery(Constants.sql("UPDATE_LOGIN_FAIL_COUNT"), new String[]{infoJson, account.getAccountId()});
     }
-    
+
     public boolean passwordChange(String oldPass, String newPass) throws AppException {
         boolean isDone = false;
-        String oldAuth = Encrypt.hash(account.getAccountId()+oldPass);
+        String oldAuth = Encrypt.hash(account.getAccountId() + oldPass);
         String newAuth = "";
-        
+
         data.open();
-        ResultSet query = data.query(Constants.sql("VALIDATE_ACCOUNT"), 
+        ResultSet query = data.query(Constants.sql("VALIDATE_ACCOUNT"),
                 new String[]{account.getAccountId(), oldAuth});
         try {
             if (query.next()) {
                 if (query.getNString("Authentication").equals(oldAuth)) {
-                    newAuth = Encrypt.hash(account.getAccountId()+newPass);
+                    newAuth = Encrypt.hash(account.getAccountId() + newPass);
                     isDone = true;
                 } else {
                     throw new AppException("Wrong password.");
@@ -265,12 +267,38 @@ public class AccountsController {
             throw new AppException("Internal error.&&" + ex.getMessage());
         }
         data.close();
-        
+
         if (isDone) {
-            data.nonQuery(Constants.sql("UPDATE_PASSWORD"), 
-                    new String[] {newAuth, account.getAccountId()});
+            data.nonQuery(Constants.sql("UPDATE_PASSWORD"),
+                    new String[]{newAuth, account.getAccountId()});
         }
-        
+
         return isDone;
+    }
+
+    public boolean recoverPassword(String email) throws AppException {
+        boolean result = false;
+        String auth = Encrypt.hash(email + "12345678");
+        int r = data.nonQuery(Constants.sql("UPDATE_PASSWORD"), new String[]{auth, email});
+        if (r > 0) {
+            result = true;
+        }
+        return result;
+    }
+    
+    public boolean recoverPasswordValidate(String email) throws AppException {
+        boolean isValid = false;
+        data.open();
+        ResultSet query = data.query(Constants.sql("VALIDATE_ACCOUNT"),
+                new String[]{email, ""});
+        try {
+            if (query.next()) {
+                isValid = true;
+            }
+        } catch (SQLException ex) {
+            throw new AppException("Internal error.&&" + ex.getMessage());
+        }
+        data.close();
+        return isValid;
     }
 }

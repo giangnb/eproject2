@@ -7,11 +7,16 @@
 package com.project2.mybudget.views;
 
 import com.project2.mybudget.App;
+import com.project2.mybudget.data.Mailing;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
@@ -32,7 +37,7 @@ public class MainScreen extends javax.swing.JFrame {
     public MainScreen() {
         initComponents();
         setIconImage(App.ICON);
-        setSize((int)Math.round(App.SCREEN_SIZE.width/1.5), (int)Math.round(App.SCREEN_SIZE.height/1.5));
+        setSize((int) Math.round(App.SCREEN_SIZE.width / 1.5), (int) Math.round(App.SCREEN_SIZE.height / 1.5));
         setLocationRelativeTo(null);
         setTitle("MyBudget - [" + App.ACCOUNT.getAccount().getInfo().getName() + "]");
         setMinimumSize(new Dimension(450, 380));
@@ -70,6 +75,8 @@ public class MainScreen extends javax.swing.JFrame {
         miSettings = new javax.swing.JMenuItem();
         menuHelp = new javax.swing.JMenu();
         miInstructions = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         miAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -158,6 +165,15 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
         menuHelp.add(miInstructions);
+
+        jMenuItem1.setText("Feedback");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        menuHelp.add(jMenuItem1);
+        menuHelp.add(jSeparator3);
 
         miAbout.setText("About");
         miAbout.addActionListener(new java.awt.event.ActionListener() {
@@ -270,13 +286,23 @@ public class MainScreen extends javax.swing.JFrame {
         JDialog d = new JDialog(this, "How to use MyBudget", true);
         Container content = new MainInstructions().getContentPane();
         d.setContentPane(content);
-        d.setMinimumSize(new Dimension(App.SCREEN_SIZE.width/5, App.SCREEN_SIZE.height/5));
+        d.setMinimumSize(new Dimension(App.SCREEN_SIZE.width / 5, App.SCREEN_SIZE.height / 5));
         d.setSize(420, 420);
         d.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         d.setLocationRelativeTo(this);
         d.setResizable(true);
         d.setVisible(true);
     }//GEN-LAST:event_miInstructionsActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JDialog d = new JDialog(this, "MyBudget - Feedback", true);
+        MainFeedback content = new MainFeedback();
+        d.setContentPane(content.getContentPane());
+        d.setSize(content.getSize());
+        d.setLocationRelativeTo(null);
+        d.setResizable(false);
+        d.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -309,9 +335,11 @@ public class MainScreen extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JLabel lblGreeting;
     private javax.swing.JMenu menuAccount;
     private javax.swing.JMenu menuBudget;

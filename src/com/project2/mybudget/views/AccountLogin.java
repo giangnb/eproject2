@@ -12,6 +12,8 @@ import com.project2.mybudget.exception.AppException;
 import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.properties.Constants;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -109,6 +111,11 @@ public class AccountLogin extends javax.swing.JFrame {
 
         btnForget.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnForget.setText("Forget password");
+        btnForget.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnForgetActionPerformed(evt);
+            }
+        });
 
         txtUser.setNextFocusableComponent(pswPassword);
 
@@ -218,7 +225,7 @@ public class AccountLogin extends javax.swing.JFrame {
 
                     // Write to file if needed
                     if (chkAutoLogin.isSelected()) {
-                        String content = txtUser.getText().toLowerCase() + "&&" + Encrypt.hash(user+pass);
+                        String content = txtUser.getText().toLowerCase() + "&&" + Encrypt.hash(user + pass);
                         FileControl.writeString(Constants.file("USER_LOGIN"), content);
                     }
 
@@ -242,6 +249,27 @@ public class AccountLogin extends javax.swing.JFrame {
     private void pswPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pswPasswordActionPerformed
         btnLoginActionPerformed(evt);
     }//GEN-LAST:event_pswPasswordActionPerformed
+
+    private void btnForgetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnForgetActionPerformed
+        String email = JOptionPane.showInputDialog(null, "Please provide your email address of this account:", "Password recovery", JOptionPane.DEFAULT_OPTION);
+        if (email != null) {
+            if (email.matches(Constants.regex("EMAIL"))) {
+                try {
+                    if (App.ACCOUNT.recoverPasswordValidate(email)) {
+                        this.dispose();
+                        AccountConfirmation.run(AccountConfirmation.ConfirmationType.RECOVERY, Encrypt.getRandomCode(5), email);
+                    } else {
+                        ExceptionViewer.view(new AppException("Account unavailable."));
+                    }
+                } catch (AppException ex) {
+                    ExceptionViewer.view(ex);
+                }
+            } else {
+                ExceptionViewer.view(new AppException("Invalid email!"));
+            }
+        }
+
+    }//GEN-LAST:event_btnForgetActionPerformed
 
     /**
      *
@@ -272,7 +300,7 @@ public class AccountLogin extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public static void runAuto() {
 
         /* Set the Nimbus look and feel */
@@ -334,6 +362,10 @@ public class AccountLogin extends javax.swing.JFrame {
                     break;
                 case 3:
                     //Account activation
+                    this.dispose();
+                    AccountConfirmation.run(AccountConfirmation.ConfirmationType.CONFIRM,
+                            Encrypt.getRandomCode(5),
+                            App.ACCOUNT.getAccount().getAccountId());
                     break;
                 default:
                     //Login right a way

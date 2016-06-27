@@ -15,8 +15,6 @@ import com.project2.mybudget.properties.Constants;
 import com.project2.mybudget.views.AccountLogin;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Account CRUD and authentication
@@ -83,6 +81,11 @@ public class AccountsController {
         return isValid;
     }
 
+    /**
+     * Automatically login using information stored in file
+     * @return
+     * @throws AppException 
+     */
     public boolean loginAuto() throws AppException {
         boolean isValid = false;
         String email, authStr;
@@ -195,19 +198,10 @@ public class AccountsController {
 
         return new String[]{"1", ""};
     }
-
-//    public static void main(String[] args) {
-//        AccountsController ac = new AccountsController();
-//        try {
-//            boolean x = ac.login("asd", "dgsad==");
-//            System.out.println(x);
-//        } catch (AppException ex) {
-//            System.out.println(ex.getMessage());
-//        }
-//    }
+    
     /**
      * Update login fail count in database
-     *
+     * 
      * @param email
      * @param isWrongPassword
      * @throws AppException
@@ -246,6 +240,14 @@ public class AccountsController {
         data.nonQuery(Constants.sql("UPDATE_LOGIN_FAIL_COUNT"), new String[]{infoJson, account.getAccountId()});
     }
 
+    /**
+     * CHange account password
+     * user must logged in to change password
+     * @param oldPass
+     * @param newPass
+     * @return
+     * @throws AppException 
+     */
     public boolean passwordChange(String oldPass, String newPass) throws AppException {
         boolean isDone = false;
         String oldAuth = Encrypt.hash(account.getAccountId() + oldPass);
@@ -276,6 +278,12 @@ public class AccountsController {
         return isDone;
     }
 
+    /**
+     * Reset password to 12345678
+     * @param email user's email address (validated email)
+     * @return
+     * @throws AppException 
+     */
     public boolean recoverPassword(String email) throws AppException {
         boolean result = false;
         String auth = Encrypt.hash(email + "12345678");
@@ -286,6 +294,12 @@ public class AccountsController {
         return result;
     }
     
+    /**
+     * Validate if account available or not
+     * @param email
+     * @return
+     * @throws AppException 
+     */
     public boolean recoverPasswordValidate(String email) throws AppException {
         boolean isValid = false;
         data.open();

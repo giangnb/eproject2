@@ -357,6 +357,12 @@ public class AccountLogin extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, act[1], "Notice", JOptionPane.INFORMATION_MESSAGE);
             }
             switch (App.ACCOUNT.getAccount().getInfo().status) {
+                case 0:
+                    // account disabled
+                    FileControl.removeFile(Constants.file("USER_LOGIN"));
+                    ExceptionViewer.view(new AppException("Account is disabled.\nContact mybudget@giangnb.com for further information."));
+                    StartScreen.run();
+                    break;
                 case 2:
                     //Password change
                     break;

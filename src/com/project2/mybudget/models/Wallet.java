@@ -11,27 +11,49 @@ package com.project2.mybudget.models;
  */
 public class Wallet {
     private int walletId;
-    private Account account;
+    private String accountId;
     private Info info;
 
     public Wallet() {
     }
 
-    public Wallet(Account account, String infoJson) {
-        this.account = account;
+    public Wallet(String accountId, String infoJson) {
+        this.accountId = accountId;
         // json process
     }
 
-    public Wallet(Account account, Info info) {
-        this.account = account;
+    public Wallet(String accountId, Info info) {
+        this.accountId = accountId;
         this.info = info;
     }
 
-    public Wallet(int walletId, Account account, String infoJson) {
+    public Wallet(int walletId, String accountId, String infoJson) {
         this.walletId = walletId;
-        this.account = account;
+        this.accountId = accountId;
         // json process
     }
+
+    public int getWalletId() {
+        return walletId;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public Info getInfo() {
+        return info;
+    }
+    
+    
+
+    @Override
+    public String toString() {
+        return "Wallet{" + "walletId=" + walletId + ", accountId=" + accountId + ", info=" + info + '}';
+    }
+    
+    
+
     
     public static class Info {
         private String name;
@@ -60,6 +82,7 @@ public class Wallet {
         public void setType(String type) {
             this.type = type;
         }
+        
         
     }
 }

@@ -333,7 +333,9 @@ public class MainScreen extends javax.swing.JFrame {
     private void tabPaneInit() {
         Component report, wallets;
         report = new JScrollPane(new Report().getContentPane());
+        wallets = new JScrollPane(new WalletManager().getContentPane());
         tabMain.add("Report", report);
+        tabMain.add("Wallet", wallets);
     }
 
     private void setGreetingLabel() {

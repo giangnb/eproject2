@@ -166,6 +166,16 @@ public class DataHelper {
         return result;
     }
     
+    public boolean checkConnection() throws AppException {
+        boolean isOk = false;
+        open();
+        if (con!=null) {
+            isOk = true;
+        }
+        close();
+        return isOk;
+    }
+    
 //    public static void main(String[] args) {
 //        DataHelper dataHelper = new DataHelper();
 //        try {

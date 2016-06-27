@@ -5,7 +5,9 @@
  */
 package com.project2.mybudget.exception;
 
+import java.awt.Component;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -21,6 +23,10 @@ public class ExceptionViewer {
         } catch (Exception e) {
             // ignore
         }
-        JOptionPane.showMessageDialog(null, msg, "MyBudget - Error", JOptionPane.ERROR_MESSAGE);
+        if (detail.equals("")) {
+            JOptionPane.showMessageDialog(null, msg, "MyBudget - Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, msg+"\n\nDetail: "+detail, "MyBudget - Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

@@ -12,7 +12,6 @@
     </Property>
     <Property name="locationByPlatform" type="boolean" value="true"/>
     <Property name="undecorated" type="boolean" value="true"/>
-    <Property name="opacity" type="float" value="0.85"/>
     <Property name="type" type="java.awt.Window$Type" editor="org.netbeans.modules.form.editors.EnumEditor">
       <Value id="POPUP"/>
     </Property>
@@ -22,6 +21,7 @@
     <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <Events>
+    <EventHandler event="windowActivated" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowActivated"/>
     <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
   </Events>
   <AuxValues>
@@ -39,11 +39,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel1" pref="380" max="32767" attributes="0"/>
-                  <Component id="lblStatus" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="pnlIcon" max="32767" attributes="0"/>
+                  <Component id="jLabel1" alignment="0" pref="380" max="32767" attributes="0"/>
+                  <Component id="lblStatus" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -54,7 +55,9 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="220" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="pnlIcon" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="lblStatus" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -73,8 +76,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblStatus">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Loading ..."/>
+        <Property name="text" type="java.lang.String" value="WELCOME"/>
       </Properties>
     </Component>
+    <Container class="javax.swing.JPanel" name="pnlIcon">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+    </Container>
   </SubComponents>
 </Form>

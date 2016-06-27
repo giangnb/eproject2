@@ -15,4 +15,8 @@ public class AppException extends Exception{
         super(message);
     }
     
+    public AppException(String message, Exception e) {
+        super(message + "&&" + e.getMessage());
+    }
+    
 }

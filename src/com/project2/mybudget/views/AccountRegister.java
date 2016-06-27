@@ -29,6 +29,7 @@ public class AccountRegister extends javax.swing.JFrame {
      */
     public AccountRegister() {
         initComponents();
+        setIconImage(App.ICON);
         setLocationRelativeTo(null);
         setResizable(false);
         

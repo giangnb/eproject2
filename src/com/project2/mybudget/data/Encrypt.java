@@ -92,6 +92,8 @@ public class Encrypt {
         return hash(email+password);
     }
     
+    
+  
 //    public static void main(String[] args) {
 //        String[] s = {"MyBudget", "project2", "1234567"};
 //        

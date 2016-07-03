@@ -17,5 +17,6 @@ nbproject/private/private.properties
 nbproject/private/*
 /dist/
 user.cfg
+<<<<<<< HEAD
 /obfuscator/
 *.xml

@@ -113,7 +113,7 @@ public class WalletsController {
         List<String> lstJsonInfo = new ArrayList<>();
         try {
             data.open();
-            ResultSet rs = data.query(Constants.sql("GET_WALLETS"), new String[]{App.ACCOUNT.getAccount().getAccountId()});
+            ResultSet rs = data.query(Constants.sql("GET_WALLETS"), new String[]{"user@user.com"});
             System.out.println(rs);
             while (rs.next()) {
                 lstJsonInfo.add(rs.getString("Info"));

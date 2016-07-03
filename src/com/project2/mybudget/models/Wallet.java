@@ -5,6 +5,8 @@
  */
 package com.project2.mybudget.models;
 
+import com.project2.mybudget.models.Wallet.Info;
+
 /**
  *
  * @author Giang
@@ -17,6 +19,12 @@ public class Wallet {
     public Wallet() {
     }
 
+    public Wallet(String jsonInfo) {
+      
+    }
+    
+    
+
     public Wallet(String accountId, String infoJson) {
         this.accountId = accountId;
         // json process
@@ -26,6 +34,13 @@ public class Wallet {
         this.accountId = accountId;
         this.info = info;
     }
+
+    public Wallet(int walletId, Info info) {
+        this.walletId = walletId;
+        this.info = info;
+    }
+    
+    
 
     public Wallet(int walletId, String accountId, String infoJson) {
         this.walletId = walletId;
@@ -58,6 +73,7 @@ public class Wallet {
     public static class Info {
         private String name;
         private String type;
+        //private Info Info;
 
         public Info() {
         }
@@ -66,6 +82,8 @@ public class Wallet {
             this.name = name;
             this.type = type;
         }
+
+        
 
         public String getName() {
             return name;
@@ -82,6 +100,12 @@ public class Wallet {
         public void setType(String type) {
             this.type = type;
         }
+
+        @Override
+        public String toString() {
+            return "Info{" + "name=" + name + ", type=" + type + '}';
+        }
+        
         
         
     }

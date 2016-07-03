@@ -108,10 +108,20 @@ public class MainScreen extends javax.swing.JFrame {
 
         miWallets.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         miWallets.setText("My wallets");
+        miWallets.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miWalletsActionPerformed(evt);
+            }
+        });
         menuWallet.add(miWallets);
 
         miNewWallet.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         miNewWallet.setText("New wallet");
+        miNewWallet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miNewWalletActionPerformed(evt);
+            }
+        });
         menuWallet.add(miNewWallet);
 
         jMenuBar1.add(menuWallet);
@@ -275,6 +285,14 @@ public class MainScreen extends javax.swing.JFrame {
         d.setVisible(true);
     }//GEN-LAST:event_miInstructionsActionPerformed
 
+    private void miNewWalletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNewWalletActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_miNewWalletActionPerformed
+
+    private void miWalletsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miWalletsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_miWalletsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -334,6 +352,7 @@ public class MainScreen extends javax.swing.JFrame {
         Component report, wallets;
         report = new JScrollPane(new Report().getContentPane());
         wallets = new JScrollPane(new WalletManager().getContentPane());
+        wallets.setSize(460, 370);
         tabMain.add("Report", report);
         tabMain.add("Wallet", wallets);
     }

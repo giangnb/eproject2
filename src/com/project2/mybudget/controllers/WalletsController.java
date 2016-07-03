@@ -19,9 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.project2.mybudget.data.Json;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import jdk.nashorn.internal.objects.NativeArray;
-
 /**
  *
  * @author duchv
@@ -29,35 +26,31 @@ import jdk.nashorn.internal.objects.NativeArray;
 public class WalletsController {
 
     public ArrayList<Wallet> wallets;
-    private DataHelper data;
+    private final DataHelper data;
     public Connection con = null;
     private Wallet wallet;
+    private Json json;
 
-    //private Json json;
+   
     public WalletsController() {
         wallets = new ArrayList<>();
         data = new DataHelper();
+        
     }
 
-    //Status: OK
+  
     public List<Wallet> getWallet() throws AppException {
         wallets = new ArrayList<>();
-        //AccountID  = App.ACCOUNT.getAccount().getAccountId();
-        //Json.DeserializeObject(rs.getString("Info"), Wallet.Info.class))
-        //, new String[] {"admin@admin.com"}
         try {
             data.open();
-            ResultSet rs = data.query(Constants.sql("GET_WALLETS"), new String[]{"admin@admin.com"});
+            ResultSet rs = data.query(Constants.sql("GET_WALLETS"), new String[]{App.ACCOUNT.getAccount().getAccountId()});
             System.out.println(rs);
             while (rs.next()) {
-                //System.out.println("fdgf");
                 wallets.add(new Wallet(Integer.parseInt(rs.getString("WalletId")), rs.getString("AccountId"), rs.getString("Info")));
             }
         } catch (AppException ex) {
             throw new AppException("Error: " + ex.getMessage());
-            //Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            //Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
             throw new AppException("SQL Error: " + ex.getMessage());
         }
         data.close();
@@ -65,16 +58,14 @@ public class WalletsController {
         return wallets;
     }
 
-    //Status: OK
+  
     public boolean AddNewWallet(Wallet.Info info) throws SQLException, AppException {
         int result = 0;
         try {
             String jsonInfo = Json.SerializeObject(info);
             con = data.open();
             result = data.nonQuery(Constants.sql("ADD_WALLET"), new String[]{"user@user.com", jsonInfo});
-
         } catch (AppException ex) {
-//            /Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
             throw new AppException("Insert Error!." + ex.getMessage());
         } finally {
             con.close();
@@ -83,7 +74,7 @@ public class WalletsController {
         return result > 0;
     }
 
-    //Test: OK
+    
     public boolean EditWallet(Wallet.Info info, String walletId) throws AppException, SQLException {
         int result = 0;
         try {
@@ -91,86 +82,72 @@ public class WalletsController {
             con = data.open();
             result = data.nonQuery(Constants.sql("UPDATE_WALLET"), new String[]{jsonInfo, walletId});
         } catch (AppException ex) {
-            //Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
+            
             throw new AppException("Edit Error: " + ex.getMessage());
         }
-         con.close();
+        finally{con.close();}
+        
         return result > 0;
     }
-
-    public boolean DeleteWallet(int walletId) throws AppException  {
+     
+    public boolean DeleteWallet(int walletId) throws AppException, SQLException {
         int result = 0;
         try {
             con = data.open();
-            result = data.nonQuery(Constants.sql("DELETE_WALLET"), new String[] {String.valueOf(walletId)});
+            result = data.nonQuery(Constants.sql("DELETE_WALLET"), new String[]{String.valueOf(walletId)});
             con.close();
         } catch (AppException ex) {
-            //Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
             throw new AppException("Delete Error: " + ex.getMessage());
         } catch (SQLException ex) {
-            //Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
             throw new AppException("SQL Statement Error: " + ex.getMessage());
-            
         }
-        
-        
+        finally {con.close();}
         return result > 0;
     }
 
-  public List<Wallet.Info> getWalletInfo() {
-     List<Wallet.Info> walletInfo = null;
-     List<Wallet> list = null;
-     Wallet.Info wInfo;
-     
+    /**
+     * Get Wallet.Info(Json String[])
+     * App.ACCOUNT.getAccount().getAccountId()
+     */
+    public List<String> getWalletInfo() throws AppException {
+        List<String> lstJsonInfo = new ArrayList<>();
         try {
-            list = new WalletsController().getWallet();
-            for (Wallet item:list) {
-               //walletInfo.add(Json.DeserializeObject(item.getInfo(), Wallet.Info.class));
-                wInfo = Json.DeserializeObject(item.getInfo().toString(), Wallet.Info.class);
-                walletInfo.add(wInfo);
+            data.open();
+            ResultSet rs = data.query(Constants.sql("GET_WALLETS"), new String[]{App.ACCOUNT.getAccount().getAccountId()});
+            System.out.println(rs);
+            while (rs.next()) {
+                lstJsonInfo.add(rs.getString("Info"));
+            }
+
+        } catch (AppException ex) {
+            throw new AppException("Error: " + ex.getMessage());
+        } catch (SQLException ex) {
+            throw new AppException("SQL Error: " + ex.getMessage());
+        }
+        finally {data.close();}
+        
+
+        return lstJsonInfo;
+    }
+
+    /**
+     * Get Wallet by Wallet ID
+     */
+    
+       public Wallet loadWalletDetail(int id) throws AppException {
+           Wallet wallet = null;
+        try {
+            data.open();
+            ResultSet rs = data.query(Constants.sql("GET_WALLET_ID"), new String[] {String.valueOf(id)});
+            while (rs.next()) {
+               wallet = new Wallet(Integer.parseInt(rs.getString("WalletId")), Json.DeserializeObject(rs.getString("Info"), Wallet.Info.class)); 
             }
         } catch (AppException ex) {
-            Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
+            throw new AppException("Error: " + ex.getMessage());
+        } catch (SQLException ex) {
+            throw new AppException("SQL Error: " + ex.getMessage());
         }
-     
-     return walletInfo;
-  }
-    
-    
-   
-  
+           return wallet;
+       }
+    }
 
-//    public static void main(String[] args) {
-//        
-////        try {
-////            boolean result = new WalletsController().DeleteWallet(6);
-////            System.out.println("Result " + result);
-//            
-////        Wallet.Info wif = new Wallet.Info("Wallet", "Cash");
-////        boolean result = new WalletsController().EditWallet(wif, "5");
-////        System.out.println("Edit Wallet: "+result);
-////        WalletsController wc = new WalletsController();
-////        List<Wallet> list = null;
-////        try {
-////            list = wc.getWallet();
-////             System.out.println(list.size());
-////        } catch (AppException ex) {
-////            Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-//////
-////       int rs = 0;
-////        try {
-////            String jsontest = Json.SerializeObject(new Wallet.Info("Wallet 2", "Creadit"));
-////            rs = new WalletsController().AddNewWallet(new Wallet.Info("Wallet 2", "Creadit"));
-////             System.out.println("Result:  "+rs + "\n" + jsontest);
-////        } catch (SQLException ex) {
-////            Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
-////        } catch (AppException ex) {
-////            Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-////        } catch (AppException ex) {
-////            Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
-////        }
-//    }
-
-}

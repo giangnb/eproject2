@@ -22,6 +22,18 @@ public class Wallet {
     public Wallet(String jsonInfo) {
       
     }
+
+    public void setWalletId(int walletId) {
+        this.walletId = walletId;
+    }
+
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
+    }
+
+    public void setInfo(Info info) {
+        this.info = info;
+    }
     
     
 
@@ -39,7 +51,6 @@ public class Wallet {
         this.walletId = walletId;
         this.info = info;
     }
-    
     
 
     public Wallet(int walletId, String accountId, String infoJson) {
@@ -83,7 +94,6 @@ public class Wallet {
             this.type = type;
         }
 
-        
 
         public String getName() {
             return name;

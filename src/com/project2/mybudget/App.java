@@ -6,6 +6,7 @@
 package com.project2.mybudget;
 
 import com.project2.mybudget.controllers.AccountsController;
+import com.project2.mybudget.controllers.WalletsController;
 import com.project2.mybudget.properties.Constants;
 import com.project2.mybudget.views.StartScreen;
 import java.awt.Dimension;
@@ -24,11 +25,13 @@ import javax.imageio.ImageIO;
 public class App {
 
     public static AccountsController ACCOUNT;
+    public static WalletsController WALLET;
     public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     public static Image ICON;
 
     public static void main(String[] args) {
         ACCOUNT = new AccountsController();
+        WALLET = new WalletsController();
         try {
             BufferedImage imgBuf = ImageIO.read(new File(Constants.file("ICON_SMALL")));
             ICON = imgBuf;

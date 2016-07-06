@@ -38,6 +38,7 @@ public class MainScreen extends javax.swing.JFrame {
         initComponents();
         setIconImage(App.ICON);
         setSize((int) Math.round(App.SCREEN_SIZE.width / 1.5), (int) Math.round(App.SCREEN_SIZE.height / 1.5));
+        
         setLocationRelativeTo(null);
         setTitle("MyBudget - [" + App.ACCOUNT.getAccount().getInfo().getName() + "]");
         setMinimumSize(new Dimension(450, 380));

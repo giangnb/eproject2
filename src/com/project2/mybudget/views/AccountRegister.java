@@ -250,7 +250,7 @@ public class AccountRegister extends javax.swing.JFrame {
             acc.setAccountId(email);
             Account.Info info = new Account.Info();
             info.setName(name);
-            info.status = 1;
+            info.status = 3;
             info.setEmail(email);
             acc.setInfo(info);
             String auth = Encrypt.getAuthenticationString(email, pass);

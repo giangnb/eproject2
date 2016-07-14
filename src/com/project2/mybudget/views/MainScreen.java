@@ -95,6 +95,11 @@ public class MainScreen extends javax.swing.JFrame {
 
         miExpense.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         miExpense.setText("Add new expense");
+        miExpense.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                miExpenseActionPerformed(evt);
+            }
+        });
         menuBudget.add(miExpense);
         menuBudget.add(jSeparator2);
 
@@ -208,6 +213,43 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void miIncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miIncomeActionPerformed
         // TODO add your handling code here:
+        JDialog d = new JDialog(this, "MyBudget - Budget", true);
+        Container content = new BudgetIncome().getContentPane();
+        d.setContentPane(content);
+        d.setSize(content.getSize().width, content.getSize().height + 30);
+        d.setLocationRelativeTo(this);
+        d.setResizable(false);
+        d.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                setGreetingLabel();
+            }
+        });
+        d.setVisible(true); 
     }//GEN-LAST:event_miIncomeActionPerformed
 
     private void miSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSettingsActionPerformed
@@ -292,6 +334,46 @@ public class MainScreen extends javax.swing.JFrame {
     private void miWalletsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miWalletsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_miWalletsActionPerformed
+
+    private void miExpenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miExpenseActionPerformed
+        JDialog d = new JDialog(this, "MyBudget - Budget", true);
+        Container content = new BudgetExpense().getContentPane();
+        d.setContentPane(content);
+        d.setSize(content.getSize().width, content.getSize().height + 30);
+        d.setLocationRelativeTo(this);
+        d.setResizable(false);
+        d.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                setGreetingLabel();
+            }
+        });
+        d.setVisible(true); 
+    }//GEN-LAST:event_miExpenseActionPerformed
 
     /**
      * @param args the command line arguments

@@ -75,7 +75,8 @@ public class Wallet {
 
     @Override
     public String toString() {
-        return "Wallet{" + "walletId=" + walletId + ", accountId=" + accountId + ", info=" + info + '}';
+//        return "Wallet{" + "walletId=" + walletId + ", accountId=" + accountId + ", info=" + info + '}';
+        return this.info.getName();
     }
     
     
@@ -115,7 +116,7 @@ public class Wallet {
         public String toString() {
             return "Info{" + "name=" + name + ", type=" + type + '}';
         }
-        
+
         
         
     }

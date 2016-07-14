@@ -174,6 +174,8 @@ public class WalletsController {
         }
        return type;
     }
-     
+     public static void main(String[] args) throws AppException {
+         System.out.println(new WalletsController().getWallet().size());
+    }
     }
 

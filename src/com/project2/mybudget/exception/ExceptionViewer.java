@@ -16,13 +16,15 @@ import javax.swing.JScrollPane;
 public class ExceptionViewer {
 
     public static void view(Exception ex) {
-        String msg = ex.getMessage().split("&&")[0];
-        String detail = "";
-        try {
-            detail = ex.getMessage().split("&&")[2];
-        } catch (Exception e) {
-            // ignore
-        }
+        String msg = ex.getMessage();
+        String detail="";
+//        String msg = ex.getMessage().split("&&")[0];
+//        String detail = "";
+//        try {
+//            detail = ex.getMessage().split("&&")[2];
+//        } catch (Exception e) {
+//            // ignore
+//        }
         if (detail.equals("")) {
             JOptionPane.showMessageDialog(null, msg, "MyBudget - Error", JOptionPane.ERROR_MESSAGE);
         } else {

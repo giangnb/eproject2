@@ -114,6 +114,7 @@ public class AccountRegister extends javax.swing.JFrame {
         lblError.setText("-- Error message --");
 
         btnRegister.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/btn_ok.png"))); // NOI18N
         btnRegister.setText("Register");
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

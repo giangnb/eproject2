@@ -64,11 +64,10 @@ public class MainScreen extends javax.swing.JFrame {
         menuBudget = new javax.swing.JMenu();
         miIncome = new javax.swing.JMenuItem();
         miExpense = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
+        miWallets = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         miReport = new javax.swing.JMenuItem();
-        menuWallet = new javax.swing.JMenu();
-        miWallets = new javax.swing.JMenuItem();
-        miNewWallet = new javax.swing.JMenuItem();
         menuAccount = new javax.swing.JMenu();
         miAccount = new javax.swing.JMenuItem();
         miLogout = new javax.swing.JMenuItem();
@@ -86,15 +85,18 @@ public class MainScreen extends javax.swing.JFrame {
 
         lblGreeting.setFont(new java.awt.Font("Tahoma", 3, 10)); // NOI18N
         lblGreeting.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblGreeting.setText("jLabel1");
+        lblGreeting.setText("{{GREETING}}");
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         jMenuBar1.setBackground(new java.awt.Color(255, 204, 51));
 
+        menuBudget.setMnemonic('B');
         menuBudget.setText("Budget");
 
         miIncome.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        miIncome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_add.png"))); // NOI18N
+        miIncome.setMnemonic('i');
         miIncome.setText("Add new income");
         miIncome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,6 +106,8 @@ public class MainScreen extends javax.swing.JFrame {
         menuBudget.add(miIncome);
 
         miExpense.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        miExpense.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_minus.png"))); // NOI18N
+        miExpense.setMnemonic('e');
         miExpense.setText("Add new expense");
         miExpense.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,38 +115,36 @@ public class MainScreen extends javax.swing.JFrame {
             }
         });
         menuBudget.add(miExpense);
-        menuBudget.add(jSeparator2);
-
-        miReport.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        miReport.setText("View report");
-        menuBudget.add(miReport);
-
-        jMenuBar1.add(menuBudget);
-
-        menuWallet.setText("Wallets");
+        menuBudget.add(jSeparator4);
 
         miWallets.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_W, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        miWallets.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_money.png"))); // NOI18N
+        miWallets.setMnemonic('w');
         miWallets.setText("My wallets");
         miWallets.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miWalletsActionPerformed(evt);
             }
         });
-        menuWallet.add(miWallets);
+        menuBudget.add(miWallets);
+        menuBudget.add(jSeparator2);
 
-        miNewWallet.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
-        miNewWallet.setText("New wallet");
-        miNewWallet.addActionListener(new java.awt.event.ActionListener() {
+        miReport.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        miReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_report.png"))); // NOI18N
+        miReport.setText("View report");
+        miReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miNewWalletActionPerformed(evt);
+                miReportActionPerformed(evt);
             }
         });
-        menuWallet.add(miNewWallet);
+        menuBudget.add(miReport);
 
-        jMenuBar1.add(menuWallet);
+        jMenuBar1.add(menuBudget);
 
+        menuAccount.setMnemonic('A');
         menuAccount.setText("Account");
 
+        miAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_user.png"))); // NOI18N
         miAccount.setText("My account");
         miAccount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,6 +153,8 @@ public class MainScreen extends javax.swing.JFrame {
         });
         menuAccount.add(miAccount);
 
+        miLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_logout.png"))); // NOI18N
+        miLogout.setMnemonic('L');
         miLogout.setText("Logout");
         miLogout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,6 +165,7 @@ public class MainScreen extends javax.swing.JFrame {
         menuAccount.add(jSeparator1);
 
         miSettings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        miSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_settings.png"))); // NOI18N
         miSettings.setText("Settings");
         miSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,9 +176,11 @@ public class MainScreen extends javax.swing.JFrame {
 
         jMenuBar1.add(menuAccount);
 
+        menuHelp.setMnemonic('H');
         menuHelp.setText("Help");
 
         miInstructions.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F11, 0));
+        miInstructions.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_instruction.png"))); // NOI18N
         miInstructions.setText("How to use");
         miInstructions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -182,6 +189,8 @@ public class MainScreen extends javax.swing.JFrame {
         });
         menuHelp.add(miInstructions);
 
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_feedback.png"))); // NOI18N
+        jMenuItem1.setMnemonic('F');
         jMenuItem1.setText("Feedback");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,6 +200,7 @@ public class MainScreen extends javax.swing.JFrame {
         menuHelp.add(jMenuItem1);
         menuHelp.add(jSeparator3);
 
+        miAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_info.png"))); // NOI18N
         miAbout.setText("About");
         miAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,43 +241,11 @@ public class MainScreen extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void miIncomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miIncomeActionPerformed
-        // TODO add your handling code here:
-        JDialog d = new JDialog(this, "MyBudget - Budget", true);
-        Container content = new BudgetIncome().getContentPane();
-        d.setContentPane(content);
-        d.setSize(content.getSize().width, content.getSize().height + 30);
+        JDialog d = new JDialog(this, "New income", true);
+        BudgetAdd add = new BudgetAdd(true);
+        d.setContentPane(add.getContentPane());
+        d.setSize(add.getSize());
         d.setLocationRelativeTo(this);
-        d.setResizable(false);
-        d.addWindowListener(new WindowListener() {
-            @Override
-            public void windowOpened(WindowEvent e) {
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-            }
-
-            @Override
-            public void windowActivated(WindowEvent e) {
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent e) {
-                setGreetingLabel();
-            }
-        });
         d.setVisible(true); 
     }//GEN-LAST:event_miIncomeActionPerformed
 
@@ -347,13 +325,8 @@ public class MainScreen extends javax.swing.JFrame {
         d.setVisible(true);
     }//GEN-LAST:event_miInstructionsActionPerformed
 
-//<<<<<<< HEAD
-    private void miNewWalletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNewWalletActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_miNewWalletActionPerformed
-
     private void miWalletsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miWalletsActionPerformed
-        // TODO add your handling code here:
+        tabMain.setSelectedIndex(1);
     }//GEN-LAST:event_miWalletsActionPerformed
 //=======
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -369,7 +342,7 @@ public class MainScreen extends javax.swing.JFrame {
 
     private void miExpenseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miExpenseActionPerformed
         JDialog d = new JDialog(this, "MyBudget - Budget", true);
-        Container content = new BudgetExpense().getContentPane();
+        Container content = new BudgetAdd(false).getContentPane();
         d.setContentPane(content);
         d.setSize(content.getSize().width, content.getSize().height + 30);
         d.setLocationRelativeTo(this);
@@ -407,6 +380,10 @@ public class MainScreen extends javax.swing.JFrame {
         d.setVisible(true); 
     }//GEN-LAST:event_miExpenseActionPerformed
 
+    private void miReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miReportActionPerformed
+        tabMain.setSelectedIndex(0);
+    }//GEN-LAST:event_miReportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -443,18 +420,17 @@ public class MainScreen extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JLabel lblGreeting;
     private javax.swing.JMenu menuAccount;
     private javax.swing.JMenu menuBudget;
     private javax.swing.JMenu menuHelp;
-    private javax.swing.JMenu menuWallet;
     private javax.swing.JMenuItem miAbout;
     private javax.swing.JMenuItem miAccount;
     private javax.swing.JMenuItem miExpense;
     private javax.swing.JMenuItem miIncome;
     private javax.swing.JMenuItem miInstructions;
     private javax.swing.JMenuItem miLogout;
-    private javax.swing.JMenuItem miNewWallet;
     private javax.swing.JMenuItem miReport;
     private javax.swing.JMenuItem miSettings;
     private javax.swing.JMenuItem miWallets;
@@ -465,12 +441,19 @@ public class MainScreen extends javax.swing.JFrame {
      * Initialize tabs for tabMain element
      */
     private void tabPaneInit() {
-        Component report, wallets;
+        Component report, wallets, budget;
         report = new JScrollPane(new Report().getContentPane());
         wallets = new JScrollPane(new WalletManager().getContentPane());
-        wallets.setSize(460, 370);
-        tabMain.add("Report", report);
-        tabMain.add("Wallet", wallets);
+        budget = new JScrollPane(new BudgetView().getContentPane());
+        tabMain.add("   Report  ", report);
+        tabMain.add("   Wallets  ", wallets);
+        tabMain.add("   My budget  ", budget);
+        tabMain.setIconAt(0, new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/tab_report.png")));
+        tabMain.setIconAt(1, new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/tab_wallets.png")));
+        tabMain.setIconAt(2, new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/tab_budget.png")));
+        tabMain.setMnemonicAt(0, 82);
+        tabMain.setMnemonicAt(1, 87);
+        tabMain.setMnemonicAt(2, 98);
     }
 
     private void setGreetingLabel() {

@@ -51,7 +51,7 @@
                               <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnDelete" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="28" max="32767" attributes="0"/>
+                              <EmptySpace pref="8" max="32767" attributes="0"/>
                               <Component id="btnAddorUpdate" min="-2" pref="80" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -72,7 +72,7 @@
               <Component id="btnNewWallet" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane2" pref="193" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="191" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblName" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -112,6 +112,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnNewWallet">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/project2/mybudget/images/menu_add.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Add new"/>
       </Properties>
     </Component>
@@ -194,6 +197,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnDelete">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/com/project2/mybudget/images/menu_remove.png"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Delete"/>
       </Properties>
     </Component>

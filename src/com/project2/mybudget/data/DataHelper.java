@@ -106,6 +106,7 @@ public class DataHelper {
                     // ignore
                 }
             }
+            System.out.println(sql);
             stm = con.prepareStatement(sql);
             rs = stm.executeQuery();
         } catch (SQLException ex) {
@@ -156,6 +157,7 @@ public class DataHelper {
                     // ignore
                 }
             }
+            System.out.println(sql);
             stm = con.prepareStatement(sql);
             result = stm.executeUpdate();
         } catch (SQLException ex) {

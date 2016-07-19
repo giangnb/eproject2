@@ -6,7 +6,6 @@
 package com.project2.mybudget.controllers;
 
 import com.project2.mybudget.App;
-import com.project2.mybudget.data.DataHelper;
 import com.project2.mybudget.models.Wallet;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.project2.mybudget.data.Json;
 import java.sql.Connection;
+
 /**
  *
  * @author duchv
@@ -31,14 +31,12 @@ public class WalletsController {
     private Wallet wallet;
     private Json json;
 
-   
     public WalletsController() {
         wallets = new ArrayList<>();
         data = new DataHelper();
-        
+
     }
 
-  
     public List<Wallet> getWallet() throws AppException {
         wallets = new ArrayList<>();
         try {
@@ -46,11 +44,11 @@ public class WalletsController {
             ResultSet rs = data.query(Constants.sql("GET_WALLETS"), new String[]{App.ACCOUNT.getAccount().getAccountId()});
             System.out.println(rs);
             while (rs.next()) {
-                 Wallet wallet = new Wallet();
-                 wallet.setWalletId(Integer.parseInt(rs.getString("WalletId")));
-                 wallet.setAccountId(rs.getString("AccountId"));
-                 wallet.setInfo(Json.DeserializeObject(rs.getString("Info"), Wallet.Info.class));
-                 wallets.add(wallet);
+                Wallet wallet = new Wallet();
+                wallet.setWalletId(Integer.parseInt(rs.getString("WalletId")));
+                wallet.setAccountId(rs.getString("AccountId"));
+                wallet.setInfo(Json.DeserializeObject(rs.getString("Info"), Wallet.Info.class));
+                wallets.add(wallet);
                 //wallets.add(new Wallet(Integer.parseInt(rs.getString("WalletId")), rs.getString("AccountId"), rs.getString("Info")));
             }
         } catch (AppException ex) {
@@ -62,8 +60,20 @@ public class WalletsController {
 
         return wallets;
     }
+    
+    public Wallet getWalletByName(String name) throws AppException {
+        Wallet w = null;
+        
+        for (Wallet wa : getWallet()) {
+            if (wa.getInfo().getName().equals(name)) {
+                w = wa;
+                break;
+            }
+        }
 
-  
+        return w;
+    }
+
     public boolean AddNewWallet(Wallet.Info info) throws SQLException, AppException {
         int result = 0;
         try {
@@ -79,7 +89,6 @@ public class WalletsController {
         return result > 0;
     }
 
-    
     public boolean EditWallet(Wallet.Info info, String walletId) throws AppException, SQLException {
         int result = 0;
         try {
@@ -87,14 +96,15 @@ public class WalletsController {
             con = data.open();
             result = data.nonQuery(Constants.sql("UPDATE_WALLET"), new String[]{jsonInfo, walletId});
         } catch (AppException ex) {
-            
+
             throw new AppException("Edit Error: " + ex.getMessage());
+        } finally {
+            con.close();
         }
-        finally{con.close();}
-        
+
         return result > 0;
     }
-     
+
     public boolean DeleteWallet(int walletId) throws AppException, SQLException {
         int result = 0;
         try {
@@ -105,14 +115,14 @@ public class WalletsController {
             throw new AppException("Delete Error: " + ex.getMessage());
         } catch (SQLException ex) {
             throw new AppException("SQL Statement Error: " + ex.getMessage());
+        } finally {
+            con.close();
         }
-        finally {con.close();}
         return result > 0;
     }
-   
+
     /**
-     * Get Wallet.Info(Json String[])
-     * App.ACCOUNT.getAccount().getAccountId()
+     * Get Wallet.Info(Json String[]) App.ACCOUNT.getAccount().getAccountId()
      */
     public List<String> getWalletInfo() throws AppException {
         List<String> lstJsonInfo = new ArrayList<>();
@@ -128,54 +138,52 @@ public class WalletsController {
             throw new AppException("Error: " + ex.getMessage());
         } catch (SQLException ex) {
             throw new AppException("SQL Error: " + ex.getMessage());
+        } finally {
+            data.close();
         }
-        finally {data.close();}
-        
 
         return lstJsonInfo;
     }
 
-      
-       /**
-        * Return WalletId from Wallet Name
-        * 
-        */
-       public int getWalletId(String name) {
-         int Id = 0;
-         List<Wallet> list = new ArrayList<>();
+    /**
+     * Return WalletId from Wallet Name
+     *
+     */
+    public int getWalletId(String name) {
+        int Id = 0;
+        List<Wallet> list = new ArrayList<>();
         try {
             list = new WalletsController().getWallet();
-            for(Wallet item:list) {
-              if (name.equals(item.getInfo().getName())) {
-                 Id = item.getWalletId();
-              }
+            for (Wallet item : list) {
+                if (name.equals(item.getInfo().getName())) {
+                    Id = item.getWalletId();
+                }
             }
         } catch (AppException ex) {
             Logger.getLogger(WalletsController.class.getName()).log(Level.SEVERE, null, ex);
         }
-         return Id;
-       }
-       
-      
-       public String loadWalletType (String name) throws AppException  {
-       String type = null;
-        List<Wallet>  list = new ArrayList<>();
-       
+        return Id;
+    }
+
+    public String loadWalletType(String name) throws AppException {
+        String type = null;
+        List<Wallet> list = new ArrayList<>();
+
         try {
             list = new WalletsController().getWallet();
-            for (Wallet item:list) {
-               if (name.equals(item.getInfo().getName())) {
-                 type = item.getInfo().getType();
-               }
+            for (Wallet item : list) {
+                if (name.equals(item.getInfo().getName())) {
+                    type = item.getInfo().getType();
+                }
             }
         } catch (AppException ex) {
             throw new AppException("Error" + ex.getMessage());
             //Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-       return type;
-    }
-     public static void main(String[] args) throws AppException {
-         System.out.println(new WalletsController().getWallet().size());
-    }
+        return type;
     }
 
+    public static void main(String[] args) throws AppException {
+        System.out.println(new WalletsController().getWallet().size());
+    }
+}

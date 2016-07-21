@@ -130,6 +130,8 @@ public class AccountDescription extends javax.swing.JFrame {
                 (datechooser.view.BackRenderer)null,
                 false,
                 true)));
+    dateBirthDate.setFormat(0);
+    dateBirthDate.setBehavior(datechooser.model.multiple.MultyModelBehavior.SELECT_SINGLE);
 
     jLabel69.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
     jLabel69.setText("Change your password");
@@ -141,6 +143,7 @@ public class AccountDescription extends javax.swing.JFrame {
     jLabel7.setText("Retype password:");
 
     btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+    btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/btn_save.png"))); // NOI18N
     btnSave.setText("Save changes");
     btnSave.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -148,6 +151,7 @@ public class AccountDescription extends javax.swing.JFrame {
         }
     });
 
+    btnChangePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/btn_change_pass.png"))); // NOI18N
     btnChangePass.setText("Change password");
     btnChangePass.addActionListener(new java.awt.event.ActionListener() {
         public void actionPerformed(java.awt.event.ActionEvent evt) {

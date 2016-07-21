@@ -6,50 +6,37 @@
 package com.project2.mybudget.views;
 
 import com.project2.mybudget.App;
-import com.project2.mybudget.data.Json;
+import com.project2.mybudget.data.DataHelper;
 import com.project2.mybudget.exception.AppException;
+import com.project2.mybudget.exception.ExceptionViewer;
 import com.project2.mybudget.models.Wallet;
+import com.project2.mybudget.properties.Constants;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import com.project2.mybudget.controllers.WalletsController;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.sql.SQLException;
-import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JList;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author duchv
+ * @author Giang
  */
-
-
 public class WalletManager extends javax.swing.JFrame {
+
+    private List<Wallet> list;
+    private int currentId;
+    private boolean isAdd = true;
 
     /**
      * Creates new form WalletManager
      */
-    //enum btn {"Update", "Add"};
-    List<Wallet> list;
-
     public WalletManager() {
         initComponents();
-        setResizable(false);
-        setTitle("MyBudget - Wallet");
-        txtWalletName.setEnabled(false);
+
         txtWalletType.setEnabled(false);
-        cbbWalletType.setEnabled(false);
+        btnDelete.setVisible(false);
+        btnAddorUpdate.setText("Add wallet");
+
         loadWalletName();
 
     }
@@ -65,54 +52,64 @@ public class WalletManager extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        btnNewWallet = new java.awt.Button();
-        jLabel2 = new javax.swing.JLabel();
-        txtWalletName = new java.awt.TextField();
-        label1 = new java.awt.Label();
-        label2 = new java.awt.Label();
-        cbbWalletType = new javax.swing.JComboBox<>();
-        btnCancel = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
-        btnAddorUpdate = new javax.swing.JButton();
+        btnNewWallet = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        listWallet = new java.awt.List();
-        txtWalletType = new java.awt.TextField();
+        listWallet = new javax.swing.JList<>();
+        lblName = new javax.swing.JLabel();
+        txtWalletName = new javax.swing.JTextField();
+        txtWalletType = new javax.swing.JTextField();
+        lblType = new javax.swing.JLabel();
+        cbbWalletType = new javax.swing.JComboBox<>();
+        btnAddorUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Yu Gothic Light", 0, 24)); // NOI18N
-        jLabel1.setText("Wallet Manager");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("My wallets");
 
-        btnNewWallet.setLabel("New Wallet");
+        btnNewWallet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_add.png"))); // NOI18N
+        btnNewWallet.setText("Add new");
         btnNewWallet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewWalletActionPerformed(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel2.setText("Wallet Name");
+        /*listWallet.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });*/
+        listWallet.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listWallet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listWalletMouseClicked(evt);
+            }
+        });
+        listWallet.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listWalletValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(listWallet);
 
-        label1.setForeground(new java.awt.Color(255, 0, 0));
+        jScrollPane2.setViewportView(jScrollPane1);
 
-        label2.setText("Wallet Type");
+        lblName.setText("Wallet name");
 
-        cbbWalletType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Creadit Card", "Bank Account", "Other", " " }));
-        cbbWalletType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbWalletTypeActionPerformed(evt);
+        lblType.setText("Wallet type");
+
+        cbbWalletType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Bank account", "Credit card", "Savings", "Other" }));
+        cbbWalletType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbbWalletTypeItemStateChanged(evt);
             }
         });
 
-        btnCancel.setText("Cancel");
-
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
+        btnAddorUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnAddorUpdate.setText("Update");
         btnAddorUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,80 +117,43 @@ public class WalletManager extends javax.swing.JFrame {
             }
         });
 
-        listWallet.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                listWalletMouseClicked(evt);
+        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_remove.png"))); // NOI18N
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(listWallet);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-<<<<<<< HEAD
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(149, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(119, 119, 119))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1)
-                            .addComponent(btnNewWallet, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCancel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnDelete)
-                                .addGap(30, 30, 30)
-                                .addComponent(btnAddorUpdate))
-=======
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
->>>>>>> master
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2)
+                            .addComponent(btnNewWallet, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(label2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(2, 2, 2)))
-                                .addGap(20, 20, 20)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-<<<<<<< HEAD
-                                    .addComponent(cbbWalletType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtWalletName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtWalletType, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(26, 26, 26)
-                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-=======
-                                    .addComponent(cbbWalletType, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtWalletType, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                                    .addComponent(txtWalletName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                                    .addComponent(lblType, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtWalletType)
+                                    .addComponent(txtWalletName)
+                                    .addComponent(cbbWalletType, 0, 142, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCancel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(35, 35, 35)
                                 .addComponent(btnDelete)
-                                .addGap(30, 30, 30)
-                                .addComponent(btnAddorUpdate)
-                                .addGap(27, 27, 27)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(btnNewWallet, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
->>>>>>> master
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAddorUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -203,158 +163,165 @@ public class WalletManager extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(btnNewWallet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnNewWallet)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(txtWalletName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cbbWalletType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(label2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addComponent(txtWalletType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnCancel)
-                            .addComponent(btnDelete)
-                            .addComponent(btnAddorUpdate)))
-                    .addComponent(jScrollPane1))
+                            .addComponent(lblName)
+                            .addComponent(txtWalletName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblType)
+                            .addComponent(cbbWalletType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtWalletType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAddorUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete))))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddorUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddorUpdateActionPerformed
-        // TODO add your handling code here:
-        Wallet wallet = new Wallet();
-
-        String cbbSelected = null;
-
-        if (cbbWalletType.getSelectedItem().toString() == "Other") {
-            cbbSelected = txtWalletType.getText();
-        } else {
-            cbbSelected = cbbWalletType.getSelectedItem().toString();
-        }
-        if (btnAddorUpdate.getText() == "Add") {
-            Wallet.Info info = new Wallet.Info();
-            info.setName(txtWalletName.getText());
-            info.setType(cbbSelected);
-
-            try {
-                boolean result = new WalletsController().AddNewWallet(info);
-                JOptionPane.showMessageDialog(this, result + "\n Added Wallet " + txtWalletName.getText() + " Success");
-
-            } catch (SQLException ex) {
-                Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (AppException ex) {
-                Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
+    private void listWalletValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listWalletValueChanged
+        int index = listWallet.getSelectedIndex();
+        if (index >= 0) {
+            btnAddorUpdate.setText("Update info");
+            btnDelete.setVisible(true);
+            btnAddorUpdate.setVisible(true);
+            isAdd = false;
+            Wallet w = listWallet.getModel().getElementAt(index);
+            currentId = w.getWalletId();
+            txtWalletName.setText(w.getInfo().getName());
+            switch (w.getInfo().getType().toLowerCase()) {
+                case "cash":
+                    cbbWalletType.setSelectedIndex(0);
+                    break;
+                case "bank account":
+                    cbbWalletType.setSelectedIndex(1);
+                    break;
+                case "credit card":
+                    cbbWalletType.setSelectedIndex(2);
+                    break;
+                case "savings":
+                    cbbWalletType.setSelectedIndex(3);
+                    break;
+                default:
+                    cbbWalletType.setSelectedIndex(4);
+                    txtWalletType.setText(w.getInfo().getType());
+                    break;
             }
-        } else {
-
-            try {
-                String walletSelected = listWallet.getSelectedItem();
-
-                Wallet.Info info = new Wallet.Info();
-                info.setName(txtWalletName.getText());
-                info.setType(cbbSelected);
-                String Id = String.valueOf(new WalletsController().getWalletId(walletSelected));
-                boolean result = new WalletsController().EditWallet(info, Id);
-                JOptionPane.showMessageDialog(this, result + "Update Success Wallet" + txtWalletName.getText());
-            } catch (AppException ex) {
-                Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
         }
-    }//GEN-LAST:event_btnAddorUpdateActionPerformed
+    }//GEN-LAST:event_listWalletValueChanged
 
-
-    private void cbbWalletTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbWalletTypeActionPerformed
-        // TODO add your handling code here:
-        if (cbbWalletType.getSelectedItem() == "Other") {
+    private void cbbWalletTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbbWalletTypeItemStateChanged
+        if (cbbWalletType.getSelectedIndex() == 4) {
             txtWalletType.setEnabled(true);
-            cbbWalletType.setEnabled(false);
+            txtWalletType.setText("");
+        } else {
+            txtWalletType.setEnabled(false);
+            txtWalletType.setText(cbbWalletType.getSelectedItem().toString());
         }
-    }//GEN-LAST:event_cbbWalletTypeActionPerformed
+    }//GEN-LAST:event_cbbWalletTypeItemStateChanged
 
     private void btnNewWalletActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewWalletActionPerformed
-        // TODO add your handling code here:
-        //btnAddorUpdate.setLabel(btnLabel.Add.toString());
-        btnAddorUpdate.setLabel("Add");
+        listWallet.setSelectedIndex(-1);
+        btnAddorUpdate.setText("Add wallet");
+        btnDelete.setVisible(false);
+        btnAddorUpdate.setVisible(true);
+        isAdd = true;
         txtWalletName.setText("");
-        txtWalletType.setText("");
-        txtWalletName.setEnabled(true);
-        cbbWalletType.setEnabled(true);
-
+        cbbWalletType.setSelectedIndex(0);
     }//GEN-LAST:event_btnNewWalletActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int option = JOptionPane.showConfirmDialog(this, "Do you want to delete selected wallet and its data?", "Delete wallet", JOptionPane.YES_NO_OPTION);
+        if (option == 0) {
+            try {
+                DataHelper data = new DataHelper();
+                data.nonQuery(Constants.sql("DELETE_DATA_BY_WALLET"), new String[]{currentId + ""});
+                data.nonQuery(Constants.sql("DELETE_WALLET"), new String[]{currentId + ""});
+                loadWalletName();
+                txtWalletName.setText("");
+                cbbWalletType.setSelectedIndex(0);
+            } catch (AppException ex) {
+                ExceptionViewer.view(ex);
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnAddorUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddorUpdateActionPerformed
+        if (isAdd) {
+            Wallet w = new Wallet(App.ACCOUNT.getAccount().getAccountId(), new Wallet.Info(txtWalletName.getText(), txtWalletType.getText()));
+            if (checkWalletNameValidity(w.getInfo().getName())) {
+                try {
+                    App.WALLET.AddNewWallet(w.getInfo());
+                } catch (SQLException | AppException ex) {
+                    ExceptionViewer.view(ex);
+                }
+            } else {
+                ExceptionViewer.view(new AppException("Cannot add new wallet."));
+            }
+        } else {
+            Wallet w = new Wallet(App.ACCOUNT.getAccount().getAccountId(), new Wallet.Info(txtWalletName.getText(), txtWalletType.getText()));
+            w.setWalletId(currentId);
+            if (checkWalletNameValidity(w.getInfo().getName(), currentId)) {
+                try {
+                    App.WALLET.EditWallet(w.getInfo(), currentId + "");
+                } catch (SQLException | AppException ex) {
+                    ExceptionViewer.view(ex);
+                }
+            } else {
+                ExceptionViewer.view(new AppException("Cannot add new wallet."));
+            }
+        }
+        loadWalletName();
+    }//GEN-LAST:event_btnAddorUpdateActionPerformed
 
     private void listWalletMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listWalletMouseClicked
-        // TODO add your handling code here:
-        btnAddorUpdate.setLabel("Update");
-
-        String walletSelected = listWallet.getSelectedItem();
-        String Type;
-        try {
-            Type = new WalletsController().loadWalletType(walletSelected);
-            if (!Type.equals("Cash") || !Type.equals("Creadit Card") || !Type.equals("Bank Account")) {
-                txtWalletType.setEnabled(true);
-                cbbWalletType.setSelectedItem("Other");
-                txtWalletType.setText(Type);
+        int index = listWallet.getSelectedIndex();
+        if (index >= 0) {
+            btnAddorUpdate.setText("Update info");
+            btnDelete.setVisible(true);
+            btnAddorUpdate.setVisible(true);
+            isAdd = false;
+            Wallet w = listWallet.getModel().getElementAt(index);
+            currentId = w.getWalletId();
+            txtWalletName.setText(w.getInfo().getName());
+            switch (w.getInfo().getType().toLowerCase()) {
+                case "cash":
+                    cbbWalletType.setSelectedIndex(0);
+                    break;
+                case "bank account":
+                    cbbWalletType.setSelectedIndex(1);
+                    break;
+                case "credit card":
+                    cbbWalletType.setSelectedIndex(2);
+                    break;
+                case "savings":
+                    cbbWalletType.setSelectedIndex(3);
+                    break;
+                default:
+                    cbbWalletType.setSelectedIndex(4);
+                    txtWalletType.setText(w.getInfo().getType());
+                    break;
             }
-            cbbWalletType.setSelectedItem(Type);
-
-        } catch (AppException ex) {
-            Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        txtWalletName.setText(walletSelected);
-        txtWalletName.setEnabled(true);
-        cbbWalletType.setEnabled(true);
     }//GEN-LAST:event_listWalletMouseClicked
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-        String walletSelected = listWallet.getSelectedItem();
-        int Id = new WalletsController().getWalletId(walletSelected);
-        try {
-            boolean result = new WalletsController().DeleteWallet(Id);
-            JOptionPane.showMessageDialog(this, result + "\n Delete Success.");
-        } catch (AppException ex) {
-            Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    private void loadWalletName() {
-        list = new ArrayList<>();
-        try {
-            list = new WalletsController().getWallet();
-            for (Wallet item : list) {
-                listWallet.add(item.getInfo().getName());
-            }
-        } catch (AppException ex) {
-            Logger.getLogger(WalletManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    public static void main(String args[]) {
-
+    public static void run(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -378,25 +345,67 @@ public class WalletManager extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new WalletManager().setVisible(true);
-                new WalletManager().setResizable(false);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddorUpdate;
-    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDelete;
-    private java.awt.Button btnNewWallet;
+    private javax.swing.JButton btnNewWallet;
     private javax.swing.JComboBox<String> cbbWalletType;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private java.awt.Label label1;
-    private java.awt.Label label2;
-    private java.awt.List listWallet;
-    private java.awt.TextField txtWalletName;
-    private java.awt.TextField txtWalletType;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblType;
+    private javax.swing.JList<Wallet> listWallet;
+    private javax.swing.JTextField txtWalletName;
+    private javax.swing.JTextField txtWalletType;
     // End of variables declaration//GEN-END:variables
+
+    private void loadWalletName() {
+        list = new ArrayList<>();
+        try {
+            list = App.WALLET.getWallet();
+            DefaultListModel<Wallet> model = new DefaultListModel<>();
+            for (Wallet w : list) {
+                model.addElement(w);
+            }
+            listWallet.setModel(model);
+        } catch (AppException ex) {
+            ExceptionViewer.view(ex);
+        }
+    }
+
+    private boolean checkWalletNameValidity(String name) {
+        try {
+            List<Wallet> lst = App.WALLET.getWallet();
+            for (Wallet w : lst) {
+                if (name.equals(w.getInfo().getName())) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (AppException ex) {
+            ExceptionViewer.view(ex);
+        }
+        return false;
+    }
+
+    private boolean checkWalletNameValidity(String name, int walletId) {
+        try {
+            List<Wallet> lst = App.WALLET.getWallet();
+            for (Wallet w : lst) {
+                if (name.equals(w.getInfo().getName()) && w.getWalletId() != walletId) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (AppException ex) {
+            ExceptionViewer.view(ex);
+        }
+        return false;
+    }
 }

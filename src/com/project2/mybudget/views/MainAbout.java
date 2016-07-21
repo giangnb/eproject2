@@ -45,7 +45,7 @@ public class MainAbout extends javax.swing.JPanel {
 
         jLabel5.setText("Copyright (c) Nowhere, 2016");
 
-        jLabel6.setText("Icon by Sergei Kokota");
+        jLabel6.setText("Icons by Sergei Kokota & PaoMedia");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

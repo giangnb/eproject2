@@ -5,6 +5,7 @@
  */
 package com.project2.mybudget.models;
 
+import java.text.NumberFormat;
 import java.util.Date;
 
 /**
@@ -86,6 +87,12 @@ public class Data {
     public void setDate(Date date) {
         this.date = date;
     }
-    
+
+    @Override
+    public String toString() {
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setGroupingUsed(true);
+        return nf.format(amount);
+    }
     
 }

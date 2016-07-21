@@ -22,6 +22,7 @@ import java.awt.event.WindowListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
@@ -141,8 +142,8 @@ public class MainScreen extends javax.swing.JFrame {
 
         jMenuBar1.add(menuBudget);
 
-        menuAccount.setMnemonic('A');
-        menuAccount.setText("Account");
+        menuAccount.setMnemonic('P');
+        menuAccount.setText("Prefences");
 
         miAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_user.png"))); // NOI18N
         miAccount.setText("My account");
@@ -166,7 +167,7 @@ public class MainScreen extends javax.swing.JFrame {
 
         miSettings.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         miSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/project2/mybudget/images/menu_settings.png"))); // NOI18N
-        miSettings.setText("Settings");
+        miSettings.setText("Database settings");
         miSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miSettingsActionPerformed(evt);
@@ -250,7 +251,13 @@ public class MainScreen extends javax.swing.JFrame {
     }//GEN-LAST:event_miIncomeActionPerformed
 
     private void miSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miSettingsActionPerformed
-        // TODO add your handling code here:
+        JDialog d = new JDialog(this, "Settings", true);
+        JFrame setting = new DatabaseSetup();
+        d.setContentPane(setting.getContentPane());
+        d.setSize(setting.getSize());
+        d.setLocationRelativeTo(this);
+        d.setResizable(false);
+        d.setVisible(true);
     }//GEN-LAST:event_miSettingsActionPerformed
 
     private void miAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAccountActionPerformed

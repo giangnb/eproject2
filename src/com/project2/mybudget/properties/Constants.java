@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  * @author Giang
  */
 public class Constants {
-    public static final ResourceBundle CONNECTION = ResourceBundle.getBundle("com.project2.mybudget.properties.Connection");
+    public static ResourceBundle CONNECTION = ResourceBundle.getBundle("com.project2.mybudget.properties.Connection");
     private static final ResourceBundle SQL = ResourceBundle.getBundle("com.project2.mybudget.properties.SqlStatements");
     private static final ResourceBundle REGEX = ResourceBundle.getBundle("com.project2.mybudget.properties.RegularExpressions");
     private static final ResourceBundle FILENAME = ResourceBundle.getBundle("com.project2.mybudget.properties.FileName");

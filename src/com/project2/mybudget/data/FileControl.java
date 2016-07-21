@@ -44,6 +44,29 @@ public class FileControl {
             }
         }
     }
+    
+    /**
+     * Append a string to file
+     * @param fileName
+     * @param content 
+     */
+    public static void appendString(String fileName, String content) {
+        String old = readString(fileName);
+        FileWriter out = null;
+        try {
+            f = new File(fileName);
+            out = new FileWriter(f);
+            out.write(old+content);
+        } catch (IOException ex) {
+            // ignore
+        } finally {
+            try {
+                out.close();
+            } catch (IOException ex) {
+                // ignore
+            }
+        }
+    }
 
     /**
      * Read a string from text file
@@ -86,6 +109,11 @@ public class FileControl {
         if (f.exists()) {
             f.delete();
         }
+    }
+    
+    public static boolean isFileExists(String fileName) {
+        f = new File(fileName);
+        return f.exists();
     }
 
 //    public static void main(String[] args) {

@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import static java.lang.System.exit;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -171,13 +172,13 @@ public class StartScreen extends javax.swing.JFrame {
         } catch (InterruptedException ex) {
             Logger.getLogger(StartScreen.class.getName()).log(Level.SEVERE, null, ex);
         }
+        System.out.println("Init OK");
 
         try {
             lblStatus.setText("Checking connection...");
             if (!new DataHelper().checkConnection()) {
-                JOptionPane.showMessageDialog(null, "Cannot establish data connection!", "Connection error", JOptionPane.ERROR_MESSAGE);
                 this.dispose();
-                exit(1);
+                DatabaseSetup.run();
             }
         } catch (AppException ex) {
             AppException exception = new AppException(ex.getMessage().split("&&")[0] + "\nApp will now discontinue.");
@@ -185,6 +186,24 @@ public class StartScreen extends javax.swing.JFrame {
             this.dispose();
             exit(1);
         }
+        System.out.println("Connection OK");
+
+        try {
+            lblStatus.setText("Checking database structure...");
+            if (!new DataHelper().checkDatabase()) {
+                this.dispose();
+                DatabaseSetup.run();
+            }
+        } catch (AppException | SQLException | ClassNotFoundException ex) {
+            if (!FileControl.isFileExists(Constants.file("DATABASE_CONFIG"))) {
+                AppException exception = new AppException(ex.getMessage().split("&&")[0] + "\nApp will now discontinue.");
+                ExceptionViewer.view(exception);
+                this.dispose();
+                exit(1);
+            }
+        }
+        System.out.println("Database OK");
+
         if (!FileControl.readString(Constants.file("USER_LOGIN")).equals("")) {
             lblStatus.setText("Logging in...");
             try {

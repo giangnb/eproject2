@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -201,6 +202,7 @@ public class BudgetAdd extends javax.swing.JFrame {
         if (!isSuccess) {
             ExceptionViewer.view(new AppException("Cannot add new data. Please try again."));
         } else {
+            JOptionPane.showMessageDialog(this, "Your information has been added.", "Success", JOptionPane.INFORMATION_MESSAGE);
             formReset();
             BudgetView.initTable();
         }

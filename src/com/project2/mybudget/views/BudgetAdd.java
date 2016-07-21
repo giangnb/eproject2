@@ -45,6 +45,11 @@ public class BudgetAdd extends javax.swing.JFrame {
             }
             cboWallet.setModel(cboWalletModel);
             cboWallet.setSelectedIndex(0);
+            
+            if (App.WALLET.getWallet().size()<=0) {
+                JOptionPane.showMessageDialog(this, "You have to create a wallet first!", "No wallet", JOptionPane.INFORMATION_MESSAGE);
+                btnSave.setEnabled(false);
+            }
         } catch (AppException ex) {
             ExceptionViewer.view(ex);
         }

@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -179,11 +180,19 @@ public class StartScreen extends javax.swing.JFrame {
             if (!new DataHelper().checkConnection()) {
                 this.dispose();
                 DatabaseSetup.run();
+                run();
             }
         } catch (AppException ex) {
             AppException exception = new AppException(ex.getMessage().split("&&")[0] + "\nApp will now discontinue.");
-            ExceptionViewer.view(exception);
-            this.dispose();
+            //ExceptionViewer.view(exception);
+            //this.setVisible(false);
+            JDialog dialog = new JDialog(this, "Database setup", true);
+            DatabaseSetup db = new DatabaseSetup();
+            dialog.setContentPane(db.getContentPane());
+            dialog.setSize(db.getSize());
+            dialog.setResizable(false);
+            dialog.setVisible(true);
+            JOptionPane.showMessageDialog(this, "You have configurated database. Please restart application.", "Database config", JOptionPane.INFORMATION_MESSAGE);
             exit(1);
         }
         System.out.println("Connection OK");

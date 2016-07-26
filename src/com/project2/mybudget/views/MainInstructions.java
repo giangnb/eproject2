@@ -16,6 +16,56 @@ public class MainInstructions extends javax.swing.JFrame {
      */
     public MainInstructions() {
         initComponents();
+        
+        jTextArea1.setText("1.	Account\n" +
+"1.1.	Register an account\n" +
+"-	A valid account is required to access and use this app.\n" +
+"-	On the Login screen, click “Register” button.\n" +
+"-	Fill the form with correct information then press “Register” button to finish.\n" +
+"\n" +
+"1.2.	Login\n" +
+"\n" +
+"-	Login is needed to use this app. You may not be asked to login if you have chosen “Auto login” option in your latest login and your stored account credential is still valid.\n" +
+"-	To login, fill your email address (User name) and password, then click “Login” button.\n" +
+"If you don’t desire to do this step again next time, please tick the “Automatic login” checkbox.\n" +
+"-	If your credential is valid, the Main screen of this app should appears. Or else, you will be informed.\n" +
+"\n" +
+"1.3.	Account confirmation\n" +
+"\n" +
+"-	Account confirmation is needed when your first login and/or you want to reset your password.\n" +
+"-	An email should be sent to your email address with a confirmation code.\n" +
+"-	Enter the latest confirmation code into shown text box, then press “Confirm” button to finish.\n" +
+"\n" +
+"1.4.	Reset password\n" +
+"-	In case you forget your password, please click “Forget password” button on Login screen then fill in your account’s email address.\n" +
+"-	After that, an account confirmation is required.\n" +
+"\n" +
+"2.	Wallet\n" +
+"2.1.	Add and wallet\n" +
+"-	Navigate to “Wallet” tab in main screen.\n" +
+"-	Click “Add new” button.\n" +
+"-	Enter name and select wallet type.\n" +
+"2.2.	Edit wallet information\n" +
+"-	Choose a wallet in Wallet list\n" +
+"-	Edit information then click “Save changes” button.\n" +
+"2.3.	Delete wallet\n" +
+"-	NOTICE: Your selected wallet and ALL data will be deleted.\n" +
+"-	Choose a wallet in Wallet list\n" +
+"-	Click “Delete” button then choose “Yes” to confirm deletion.\n" +
+"3.	Income and Expense record\n" +
+"3.1.	Add new record\n" +
+"-	Navigate to “My budget” tab in main screen.\n" +
+"-	Click “New income” or “New expense”.\n" +
+"-	Fill the information in the form then press “Save” button.\n" +
+"-	Continue fill in the form other information if you desire to add more. Or else, close the form.\n" +
+"3.2.	Edit record\n" +
+"-	Select a record in table.\n" +
+"-	Click “Edit” button.\n" +
+"-	Edit information.\n" +
+"-	Click “Save changes”.\n" +
+"3.3.	Delete record\n" +
+"-	Select a record in table.\n" +
+"-	Click “Delete”.");
     }
 
     /**
@@ -36,6 +86,7 @@ public class MainInstructions extends javax.swing.JFrame {
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jTextArea1.setText("Instruction\n\nblah blah blah blah\n\nhahahahah\nhuhuhu\nhihihih\n\nmybudget\n\n$$$$$$$$$$$$$$$$$$");
